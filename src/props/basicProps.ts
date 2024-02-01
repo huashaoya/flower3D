@@ -1,0 +1,43 @@
+export const basicProps={
+    w:{
+        type:Number,
+        default:1
+    },
+    h:{
+        type:Number,
+        default:1
+    },
+    d:{
+        type:Number,
+        default:1
+    },
+    x:{
+        type:Number,
+        default:0
+    },
+    y:{
+        type:Number,
+        default:0
+    },
+    z:{
+        type:Number,
+        default:0
+    },
+    rx:{
+        type:Number,
+        default:0
+    },
+    ry:{
+        type:Number,
+        default:0
+    },
+    rz:{
+        type:Number,
+        default:0
+    },
+    color:{
+        type:String,
+        default:"white"
+    }
+}
+
