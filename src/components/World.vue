@@ -1,19 +1,26 @@
 <script setup lang="ts">
 import { worldProps } from "../props/worldProps";
-import * as THREE from "three";
-import * as CANNON from "cannon-es";
-import { PropType, ref, toRaw, watchEffect, onMounted } from "vue";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Scene from "../engine/Scene";
-import Setting from "../engine/Settings";
-const props = defineProps(worldProps);
+import cannonWorld from "../engine/cannonWorld"
 
+import { PropType , onMounted , provide} from "vue";
+
+import * as THREE from "three";
+import * as CANNON from "cannon-es"
+
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import manager from "../engine/manager";
+
+const props = defineProps(worldProps);
+const Settings={
+  pbr:props.pbr,
+  physics:props.physics
+}
+provide('Settings',Settings) 
 //时钟
 const clock = new THREE.Clock();
 //场景
 const scene = Scene;
-console.log(scene);
 //相机
 let camera: THREE.PerspectiveCamera;
 //渲染器
@@ -21,7 +28,8 @@ const renderer = new THREE.WebGLRenderer();
 // 控制器
 let controls: OrbitControls;
 //物理世界
-let physicsWorld: CANNON.World;
+let physicsWorld:CANNON.World
+
 onMounted(() => {
   init();
   animate();
@@ -46,35 +54,31 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
-  //如果开启了pbr
-  if (props.pbr) {
-    // 开启场景中的阴影贴图
-    renderer.shadowMap.enabled = true;
-    Setting.pbr=true
-  }
+ 
+  renderer.shadowMap.enabled = props.pbr;
 
   //如果开启了物理
-  if (props.physics) {
-    physicsWorld = new CANNON.World();
-    physicsWorld.gravity.set(0, -9.8, 0);
-     Setting.physics=true
-  }
+  // if (props.physics) {
+  //   physicsWorld = cannonWorld;
+  //   Settings.physics=true
+  // }
+
 }
 
 function animate() {
-  //let deltaTime = clock.getDelta();
+  let deltaTime = clock.getDelta();
   requestAnimationFrame(animate);
   //如果开启了物理
   if (props.physics) {
-    //this.physicsWorld.step(1 / 120, deltaTime, 3);
-    // 同步所有与物理模拟相关的 Three.js 对象的位置和旋转
-    //   this.elements.forEach((elements) => {
-    //     if (elements.updateFromPhysics) {
-    //       elements.updateFromPhysics();
-    //     }
-    //   });
+    cannonWorld.step(1 / 120, deltaTime, 3);
+    manager.update()
+    //同步所有与物理模拟相关的 Three.js 对象的位置和旋转
+      // this.elements.forEach((elements) => {
+      //   if (elements.updateFromPhysics) {
+      //     elements.updateFromPhysics();
+      //   }
+      // });
   }
-  //this.animationMixer.update( deltaTime);
   renderer.render(scene, camera);
 }
 </script>
@@ -91,4 +95,3 @@ function animate() {
   height: 100%;
 }
 </style>
-../engine/Scene

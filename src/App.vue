@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import World from "./components/World.vue";
 import Cube from "./components/basic/Cube.vue";
+import AmbientLight from "./components/light/AmbientLight.vue"
 </script>
 
 <template>
   <div class="wrapper">
     <div class="box">
-      <World bg="black" pbr>
-        <Cube :x="2" color="red"/>
-        <Cube :x="1" color="yellow"/>
-        <Cube :x="0" color="green"/>
+      <World bg="black" pbr physics>
+        <AmbientLight :intensity="10"/>
+        <Cube :x="0.8" :y="-3" v-bind="{color:'blue'}" :mass="0"/>
+        <Cube :x="-0.6" :y="-1" color="red" :mass="0"/>
+        <Cube :x="0" color="#ffffff"  :mass="1"/>
       </World>
     </div>
   </div>
