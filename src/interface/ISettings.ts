@@ -1,4 +1,5 @@
 export  interface ISettings{
-    pbr:Boolean,
-    physics:Boolean
+    pbr:boolean,
+    physics:boolean,
+    id:number
 }

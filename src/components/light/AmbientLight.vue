@@ -17,3 +17,5 @@ function init() {
   Scene.add(light);
 }
 </script>
+
+<template></template>
