@@ -1,13 +1,11 @@
 import { basicProps } from "./basicProps"
+import {objectToKV} from "./utils/objectToKV"
 
-let basicPhysicsProps={
+export const basicPhysicsProps={
     ...basicProps,
     mass:{
         type:Number,
         default:1
     }
 }
-
-
-export default basicPhysicsProps
-
+export const basicPhysicsPropsKV:Record<string,any>=objectToKV(basicPhysicsProps)

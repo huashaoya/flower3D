@@ -6,7 +6,7 @@ import * as CANNON from "cannon-es"
 export class Member{
     object3D:THREE.Object3D|null
     physicsBody:CANNON.Body|null
-    constructor(object3D:THREE.Object3D|null,physicsBody:CANNON.Body|null){     
+    constructor(object3D:THREE.Object3D|null,physicsBody:CANNON.Body|null=null){     
         this.object3D=object3D
         this.physicsBody=physicsBody
     }
@@ -26,6 +26,9 @@ export class Member{
     }
     setY(y:number){
         this.object3D?.position.setY(y)
+    }
+    setZ(z:number){
+        this.object3D?.position.setZ(z)
     }
     setRotation(rx:number,ry:number,rz:number){
         this.object3D?.rotation.set(rx,ry,rz)

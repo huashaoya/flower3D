@@ -9,6 +9,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
+    "suppressImplicitAnyIndexErrors": true,
 
     /* Linting */
     "strict": true,

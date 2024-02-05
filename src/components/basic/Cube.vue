@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import basicPhysicsProps from "../../props/basicPhysicsProps";
-import { ISettings } from "../../interface/ISettings";
+import {
+  basicPhysicsProps,
+  basicPhysicsPropsKV,
+} from "../../props/basicPhysicsProps";
 import { ManagerBuilder } from "../../engine/ManagerBuilder";
 import { Member } from "../../engine/core/Member";
 import useChange from "../../hooks/useChange";
@@ -8,7 +10,7 @@ import useChange from "../../hooks/useChange";
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
 
-import { onMounted, inject, watchEffect, computed, toRaw } from "vue";
+import { onMounted, inject, watchEffect, computed, toRaw, ref } from "vue";
 
 const props = defineProps(basicPhysicsProps);
 let id: number = inject("id", 1);
@@ -25,8 +27,8 @@ function init() {
     : new THREE.MeshBasicMaterial({ color: props.color });
   const element = new THREE.Mesh(geometry, material);
 
-  element.position.set(props.x, props.y, props.z);
-  element.rotation.set(props.rx, props.ry, props.rz);
+  //element.position.set(props.x, props.y, props.z);
+  //element.rotation.set(props.rx, props.ry, props.rz);
 
   if (manager.settings?.pbr) {
     element.castShadow = true;
@@ -53,15 +55,18 @@ function init() {
 
   const member = new Member(element, body);
   manager.members.push(member);
-  
-  let oldProps=JSON.parse(JSON.stringify(props))
 
-  const  changedProperties  = useChange(props,oldProps)
+  let oldProps = ref(basicPhysicsPropsKV);
+  const changedProps = useChange(props, oldProps);
+
   watchEffect(() => {
-    oldProps=JSON.parse(JSON.stringify(props))
-    for(const key of toRaw(changedProperties.value)){
-      if(key=='y'){
-        member.setY(oldProps.y)
+    oldProps.value = JSON.parse(JSON.stringify(props));
+    //console.log('变化了')
+    //console.log(toRaw( oldProps.value))
+    console.log(toRaw(changedProps.value));
+    for (const key of toRaw(changedProps.value)) {
+      if (key == "y") {
+        member.setY(oldProps.value.y);
       }
     }
   });
