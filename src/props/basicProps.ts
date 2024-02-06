@@ -1,16 +1,4 @@
 export const basicProps={
-    w:{
-        type:Number,
-        default:1
-    },
-    h:{
-        type:Number,
-        default:1
-    },
-    d:{
-        type:Number,
-        default:1
-    },
     x:{
         type:Number,
         default:0
@@ -35,9 +23,9 @@ export const basicProps={
         type:Number,
         default:0
     },
-    color:{
-        type:String,
-        default:"white"
+    scale:{
+        type:Number,
+        default:1
     }
 }
 

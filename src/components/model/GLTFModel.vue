@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { lightProps, lightPropsKV } from "../../props/light/lightProps";
+import { modelProps, modelPropsKV } from "../../props/model/modelProps";
 import { ManagerBuilder } from "../../engine/ManagerBuilder";
-import { AmbientLight } from "../../engine/core/light/AmbientLight";
+import { GLTFModel } from "../../engine/core/model/GLTFModel";
 import useChange from "../../hooks/useChange";
 
 import { onMounted, inject, watchEffect, computed, toRaw, ref } from "vue";
 
-const props = defineProps(lightProps);
+const props = defineProps(modelProps);
 let id: number = inject("id", 1);
 //全局管理对象
 const manager = ManagerBuilder.getManager(id);
@@ -15,10 +15,10 @@ onMounted(async () => {
 });
 
 function init() {
-  const member = new AmbientLight(props, manager);
+  const member = new GLTFModel(props, manager);
   manager.members.push(member);
 
-  let oldProps = ref(lightPropsKV);
+  let oldProps = ref(modelPropsKV);
   const changedProps = useChange(props, oldProps);
 
   watchEffect(() => {

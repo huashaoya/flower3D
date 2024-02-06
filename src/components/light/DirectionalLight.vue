@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { lightProps, lightPropsKV } from "../../props/light/lightProps";
 import { ManagerBuilder } from "../../engine/ManagerBuilder";
-import { AmbientLight } from "../../engine/core/light/AmbientLight";
+import { DirectionalLight } from "../../engine/core/light/DirectionalLight";
 import useChange from "../../hooks/useChange";
 
 import { onMounted, inject, watchEffect, computed, toRaw, ref } from "vue";
@@ -15,7 +15,7 @@ onMounted(async () => {
 });
 
 function init() {
-  const member = new AmbientLight(props, manager);
+  const member = new DirectionalLight(props, manager);
   manager.members.push(member);
 
   let oldProps = ref(lightPropsKV);

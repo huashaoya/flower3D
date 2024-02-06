@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { lightProps, lightPropsKV } from "../../props/light/lightProps";
+import { circleProps, circlePropsKV } from "../../props/basic/circleProps";
 import { ManagerBuilder } from "../../engine/ManagerBuilder";
-import { AmbientLight } from "../../engine/core/light/AmbientLight";
+import { Sphere } from "../../engine/core/basic/Sphere";
 import useChange from "../../hooks/useChange";
 
 import { onMounted, inject, watchEffect, computed, toRaw, ref } from "vue";
 
-const props = defineProps(lightProps);
+const props = defineProps(circleProps);
 let id: number = inject("id", 1);
 //全局管理对象
 const manager = ManagerBuilder.getManager(id);
@@ -15,10 +15,10 @@ onMounted(async () => {
 });
 
 function init() {
-  const member = new AmbientLight(props, manager);
+  const member = new Sphere(props, manager);
   manager.members.push(member);
 
-  let oldProps = ref(lightPropsKV);
+  let oldProps = ref(circlePropsKV);
   const changedProps = useChange(props, oldProps);
 
   watchEffect(() => {

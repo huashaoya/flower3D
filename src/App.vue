@@ -1,34 +1,41 @@
 <script setup lang="ts">
 import World from "./components/World.vue";
 import Cube from "./components/basic/Cube.vue";
-import AmbientLight from "./components/light/AmbientLight.vue"
+import AmbientLight from "./components/light/AmbientLight.vue";
+import DirectionalLight from "./components/light/DirectionalLight.vue";
+import Sphere from "./components/basic/Sphere.vue";
+import GLTFModel from "./components/model/GLTFModel.vue";
 import { ref } from "vue";
- let a = ref(10)
+let a = ref(1);
 </script>
 
 <template>
   <div class="wrapper">
     <div class="box">
-       <button @click="a++">+</button>
-       <button @click="a--">-</button>
-      <World bg="black" :id="3" pbr>
-        <AmbientLight :intensity="10"/>
-        <Cube :x="5" :y="a" v-bind="{color:'green'}" :mass="0"/>
-         <!-- <Cube :x="0.8" :y="-5" v-bind="{color:'green',w:10}" :mass="0"/>
-        <Cube :x="-0.6" :y="-1" color="red" :mass="0"/>
-        <Cube :x="0" color="#ffffff"  :mass="1"/> -->
+      <button @click="a++">+</button>
+      <button @click="a--">-</button>
+      <World bg="black" :id="3" pbr physics>
+        <AmbientLight :intensity="a" />
+        <DirectionalLight v-bind="{ x: 10, y: 5, x: 3 }" />
+        <sphere v-bind="{ color: 'blue', x: -3, mass: 10 }" />
+        <sphere v-bind="{ color: 'yellow', x: 3, r: 0.5 }" />
+        <cube v-bind="{ color: 'brown', y: -2, w: 10 }" />
+        <cube v-bind="{ color: 'green', y: -3 }" />
+        <Cube
+          :x="0.8"
+          :y="-5"
+          v-bind="{ color: 'white', h: 0.2, w: 20, d: 5 }"
+          :mass="0"
+        />
       </World>
     </div>
-   <!-- <div class="box">
-      <World bg="gray" physics>
-        <AmbientLight :intensity="10"/>
-        <Cube :x="0.8" :y="-3" v-bind="{color:'red'}" :mass="0"/>
-        <Cube :x="-0.6" :y="-1" color="red" :mass="0"/>
-        <Cube :x="0" color="#ffffff"  :mass="1"/>
+    <div class="box">
+      <World bg="black">
+        <AmbientLight :intensity="a" />
+        <GLTFModel src="/boxman.glb" :y="-5" :scale="10" />
       </World>
-    </div> -->
+    </div>
   </div>
-  
 </template>
 
 <style scoped>
