@@ -1,5 +1,3 @@
-import * as THREE from "three";
-import * as CANNON from "cannon-es"
 import { Member } from "../Member";
 import { Manager } from "../Manager";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";

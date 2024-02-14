@@ -1,7 +1,6 @@
 //一个世界的全局管理对象
 
 import { Member } from "./Member"
-import { ISettings } from "../../interface/ISettings";
 import * as THREE from "three";
 import * as CANNON from "cannon-es"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -22,7 +21,7 @@ export class Manager {
     //成员数组
     members: Member[] = []
     //配置对象
-    settings: ISettings = {
+    settings: Record<string,any> = {
         pbr: false,
         physics: false,
         id: 1
@@ -43,7 +42,7 @@ export class Manager {
         this.renderer.render(this.scene, this.camera);
        
     }
-    setSettings(setting: ISettings): void {
+    setSettings(setting: Record<string,any>): void {
         this.settings = setting
     }
     setCamara(width: number, height: number): void {

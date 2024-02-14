@@ -1,7 +1,5 @@
 //将vue组价props对象在装换成kv型对象
 
-import { basicProps } from "../basicProps"
-
 export function objectToKV(obj:Record<string,any>){
     let KV={}
     for (let key in obj) {

@@ -16,7 +16,7 @@ export class AmbientLight extends MemberWrapper {
     }
     setColor(color:string){
         //@ts-ignore
-        this.object3D?.material.color.set(color);     
+        this.object3D?.color.set(color);     
     }
     setIntensity(i:number){
         //@ts-ignore

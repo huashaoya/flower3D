@@ -10,7 +10,7 @@
     "noEmit": true,
     "jsx": "preserve",
     "suppressImplicitAnyIndexErrors": true,
-
+    "ignoreDeprecations": "5.0",
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

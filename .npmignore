@@ -1,0 +1,8 @@
+public
+src
+.vscode
+
+vite.config.ts
+tsconfig.json
+tsconfig.node.json
+index.html
