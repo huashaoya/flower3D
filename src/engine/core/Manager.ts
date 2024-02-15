@@ -11,7 +11,7 @@ export class Manager {
     //时钟
     clock: THREE.Clock = new THREE.Clock();
     //相机
-    camera: THREE.PerspectiveCamera=new THREE.PerspectiveCamera;
+    camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera;
     //渲染器
     renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
     // 控制器
@@ -20,8 +20,10 @@ export class Manager {
     cannonWorld: CANNON.World = new CANNON.World()
     //成员数组
     members: Member[] = []
+    //动画管理器
+    animationMixer;
     //配置对象
-    settings: Record<string,any> = {
+    settings: Record<string, any> = {
         pbr: false,
         physics: false,
         id: 1
@@ -29,6 +31,7 @@ export class Manager {
 
     constructor() {
         this.cannonWorld.gravity.set(0, -9.8, 0)
+        this.animationMixer = new THREE.AnimationMixer(this.scene)
     }
     update(): void {
         let deltaTime = this.clock.getDelta();
@@ -39,10 +42,10 @@ export class Manager {
                 item.updateFromPhysics()
             })
         }
+        this.animationMixer.update(deltaTime);
         this.renderer.render(this.scene, this.camera);
-       
     }
-    setSettings(setting: Record<string,any>): void {
+    setSettings(setting: Record<string, any>): void {
         this.settings = setting
     }
     setCamara(width: number, height: number): void {

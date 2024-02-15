@@ -7,16 +7,17 @@ import Sphere from "./components/basic/Sphere.vue";
 import GLTFModel from "./components/model/GLTFModel.vue";
 import { onMounted, ref } from "vue";
 let a = ref(1);
+let aindex = ref(-1);
 const cube = ref()
 
 onMounted(() => {
-  cube.value.setColor("green")
+  //cube.value.setColor("green")
 });
 </script>
 
 <template>
   <div class="wrapper">
-    <div class="box">
+    <!-- <div class="box">
       <button @click="a++">+</button>
       <button @click="a--">-</button>
       <World bg="black" :id="3" pbr>
@@ -29,14 +30,16 @@ onMounted(() => {
         <cube v-bind="{ color: 'green', y: -3 }" />
         <Cube ref="cube" :x="0.8" :y="-5" v-bind="{ color: 'white', h: 0.2, w: 20, d: 5 }" :mass="0" />
       </World>
-    </div>
+    </div> -->
     <div class="box2">
       <World bg="black">
         <AmbientLight :intensity="a" />
-        <GLTFModel src="./boxman.glb" :y="-5" :scale="10" />
+        <GLTFModel src="./boxman.glb" :y="-5" :scale="10" :animation-index="aindex"/>
       </World>
     </div>
+    
   </div>
+  <button v-for="(item,index) in 34" @click="aindex=index">{{ item }}</button>
 </template>
 
 <style scoped>
