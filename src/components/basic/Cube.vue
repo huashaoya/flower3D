@@ -10,11 +10,13 @@ const props = defineProps(cubeProps);
 let id: number = inject("id", 1);
 const manager = ManagerBuilder.getManager(id);
 const member = new Cube(props, manager);
-manager.members.push(member);
+//manager.members.push(member);
 
 let oldProps = ref(cubePropsKV);
-useChange(props, oldProps,member);
+useChange(props, oldProps,member,manager);
 defineExpose(member)
 </script>
 
-<template></template>
+<template>
+    <slot></slot>
+</template>

@@ -33,7 +33,9 @@ function init() {
     props.bg == "transparent" ? new THREE.Color() : new THREE.Color(props.bg);
   const width = worldRef.value.offsetWidth;
   const height = worldRef.value.offsetHeight;
-  manager.setCamara(width, height);
+  manager.updateCamaras(width, height);
+  provide("width", width);
+  provide("height", height);
   worldRef?.value.appendChild(manager.renderer.domElement);
 }
 

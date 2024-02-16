@@ -11,7 +11,7 @@ export class MemberWrapper extends Member {
             mesh.castShadow = true;
             mesh.receiveShadow = true;
         }
-        manager.scene.add(mesh);
+        //manager.scene.add(mesh);
 
         let body = null;
         //如果开启了物理

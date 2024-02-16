@@ -1,6 +1,7 @@
 import { Member } from "../Member";
 import { Manager } from "../Manager";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import * as THREE from "three";
 
 export class GLTFModel extends Member {
     animations: THREE.AnimationAction[] = []
@@ -12,25 +13,25 @@ export class GLTFModel extends Member {
         const gltfLoader = new GLTFLoader();
         const that = this
         gltfLoader.load(props.src, function (gltf) {
-            element = gltf.scene
-            that.object3D = element
-            element.scale.set(props.scale, props.scale, props.scale)
-            element.position.set(props.x, props.y, props.z)
-            manager.scene.add(element)
+            element = gltf.scene;
+            that.object3D = element;
+            element.scale.set(props.scale, props.scale, props.scale);
+            element.position.set(props.x, props.y, props.z);
+            manager.scene.add(element);
 
             for (let i = 0; i < gltf.animations.length; i++) {
                 const action = manager.animationMixer.clipAction(gltf.animations[i]);
-                action.clampWhenFinished = true
-                that.animations.push(action)
+                action.clampWhenFinished = true;
+                that.animations.push(action);
             }
             if (animationIndex >= 0) {
-                that.animationIndex = animationIndex
-                that.animations[animationIndex].play()
+                that.animationIndex = animationIndex;
+                that.animations[animationIndex].play();
             }
             that.setters = {
                 ...that.setters,
                 animationIndex: that.setAnimationIndex,
-            }
+            };
         });
         
     }

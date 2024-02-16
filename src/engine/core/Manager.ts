@@ -10,8 +10,9 @@ export class Manager {
     scene: THREE.Scene = new THREE.Scene()
     //时钟
     clock: THREE.Clock = new THREE.Clock();
-    //相机
-    camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera;
+    //相机组
+    cameras: THREE.PerspectiveCamera[] = [new THREE.PerspectiveCamera(75, 1, 0.1, 1000)];
+    cameraActiveIndex:number=0
     //渲染器
     renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
     // 控制器
@@ -42,18 +43,26 @@ export class Manager {
                 item.updateFromPhysics()
             })
         }
+        this.members.forEach(item => {
+            item.update()
+        })
         this.animationMixer.update(deltaTime);
-        this.renderer.render(this.scene, this.camera);
+        this.renderer.render(this.scene, this.cameras[this.cameraActiveIndex]);
     }
     setSettings(setting: Record<string, any>): void {
         this.settings = setting
     }
-    setCamara(width: number, height: number): void {
-        this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
-        this.camera.position.z = 10
-
+    updateCamaras(width: number, height: number): void {
+        this.cameras.forEach(item=>{
+            item.aspect=width / height
+            item.updateProjectionMatrix ()
+            
+        })
+        console.log(this)
+        this.cameras[0].position.z = 10
+        //渲染器相关
         this.renderer.setSize(width, height)
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        this.controls = new OrbitControls(this.cameras[0], this.renderer.domElement);
         this.controls.enableDamping = true;
 
         this.renderer.shadowMap.enabled = this.settings.pbr;

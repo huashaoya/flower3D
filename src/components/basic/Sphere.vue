@@ -10,11 +10,13 @@ const props = defineProps(circleProps);
 let id: number = inject("id", 1);
 const manager = ManagerBuilder.getManager(id);
 const member = new Sphere(props, manager);
-manager.members.push(member);
+//manager.members.push(member);
 
 let oldProps = ref(circlePropsKV);
-useChange(props, oldProps, member);
+useChange(props, oldProps, member,manager);
 defineExpose(member)
 </script>
 
-<template></template>
+<template>
+    <slot></slot>
+</template>
