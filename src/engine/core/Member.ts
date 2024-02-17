@@ -4,25 +4,28 @@ import * as THREE from "three";
 import * as CANNON from "cannon-es"
 
 export class Member {
-    object3D: THREE.Mesh | null |THREE.Light|THREE.Group
+    childrens: Member[] = []
+    object3D: THREE.Mesh | null | THREE.Light | THREE.Group
     physicsBody: CANNON.Body | null
-    childrens:Member[]=[]
-    setters:Record<string,any> = {
+    forwardSpeed: number = 0
+    setters: Record<string, any> = {
         x: this.setX,
         y: this.setY,
-        z:this.setZ,
-        rx:this.setRx,
-        ry:this.setRy,
-        rz:this.setRz,
-        scale:this.setScale,      
+        z: this.setZ,
+        rx: this.setRx,
+        ry: this.setRy,
+        rz: this.setRz,
+        scale: this.setScale,
+        forwardSpeed: this.setForwardSpeed
     };
-    constructor(object3D: THREE.Mesh |THREE.Light| null|THREE.Group, physicsBody: CANNON.Body | null = null) {
+
+    constructor(object3D: THREE.Mesh | THREE.Light | null | THREE.Group, physicsBody: CANNON.Body | null = null) {
         this.object3D = object3D
         this.physicsBody = physicsBody
     }
-    add(member:Member){
+    add(member: Member) {
         this.childrens.push(member)
-        if(member.object3D){
+        if (member.object3D) {
             this.object3D?.add(member.object3D)
         }
     }
@@ -37,7 +40,20 @@ export class Member {
             this.object3D.quaternion.copy(quaternion);
         }
     }
-    update(){
+    update() {
+        if (this.forwardSpeed != 0&&this.object3D) {
+            const direction = new THREE.Vector3(); // 前进方向向量
+            // 获取模型的朝向
+            this.object3D.getWorldDirection(direction);
+            direction.normalize(); // 标准化向量
+
+            // 计算每个方向上的移动增量
+            const delta = direction.clone().multiplyScalar(this.forwardSpeed);
+
+            // 将增量加到模型的当前位置上
+            this.object3D.position.add(delta);
+        }
+
         this.childrens.forEach(item => {
             item.update()
         })  //console.log(99)
@@ -45,7 +61,10 @@ export class Member {
     change(key: any, value: any) {
         const setter = this.setters[key];
         setter?.call(this, value);
-        
+
+    }
+    setForwardSpeed(speed: number) {
+        this.forwardSpeed = speed/100
     }
     setPosition(x: number, y: number, z: number) {
         this.object3D?.position.set(x, y, z)
@@ -79,7 +98,7 @@ export class Member {
         const euler = new THREE.Euler(0, 0, rz);
         this.object3D?.rotation.set(euler.x, euler.y, euler.z);
     }
-    setScale(scale:number){
-        this.object3D?.scale.set(scale,scale,scale)
+    setScale(scale: number) {
+        this.object3D?.scale.set(scale, scale, scale)
     }
 }

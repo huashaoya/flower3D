@@ -10,7 +10,7 @@ const props = defineProps(modelProps);
 let id: number = inject("id", 1);
 const manager = ManagerBuilder.getManager(id);
 const member = new GLTFModel(props, manager,props.animationIndex);
-//manager.members.push(member);
+
 
 let oldProps = ref(modelPropsKV);
 useChange(props, oldProps, member,manager);

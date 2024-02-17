@@ -26,6 +26,10 @@ export const basicProps={
     scale:{
         type:Number,
         default:1
+    },
+    forwardSpeed:{
+        type:Number,
+        default:0
     }
 }
 
