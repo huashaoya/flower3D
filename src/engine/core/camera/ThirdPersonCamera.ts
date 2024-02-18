@@ -10,10 +10,10 @@ export class ThirdPersonCamera extends Member {
    radius: number = 20
    dom: HTMLCanvasElement
    mouseLocked: boolean = false
-   locked:boolean=false
-   sensitivity={
-      x:0.25,
-      y:0.25
+   locked: boolean = false
+   sensitivity = {
+      x: 0.25,
+      y: 0.25
    }
    constructor(manager: Manager, target: Member) {
       super(null, null)
@@ -24,32 +24,42 @@ export class ThirdPersonCamera extends Member {
       this.dom = manager.renderer.domElement
       this.dom.addEventListener('mousedown', this.boundOnMouseDown, false);
       document.addEventListener('pointerlockchange', this.onPointerlockChange, false);
-      this.setters={
+      this.setters = {
          ...this.setters,
-         locked:this.setLocked,
-     }
+         locked: this.setLocked,
+      }
    }
 
    update() {
       if (this.target.object3D) {
          const target = this.target.object3D.position
-         const rotation=this.target.object3D.rotation
+         const rotation = this.target.object3D.rotation
          this.camera.position.x = target.x + this.radius * Math.sin(this.theta * Math.PI / 180) * Math.cos(this.phi * Math.PI / 180);
          this.camera.position.y = target.y + this.radius * Math.sin(this.phi * Math.PI / 180);
          this.camera.position.z = target.z + this.radius * Math.cos(this.theta * Math.PI / 180) * Math.cos(this.phi * Math.PI / 180);
          this.camera.updateMatrix();
          this.camera.lookAt(new THREE.Vector3(target.x, target.y + 4, target.z));
-         if(this.locked){
-            this.target.object3D.rotation.set(rotation.x,(this.theta-180)/180*Math.PI,rotation.z)
+         if (this.locked) {
+            //this.target.object3D.rotation.set(rotation.x,(this.theta-180)/180*Math.PI,rotation.z)
+            // 定义目标角度
+       
+            // 计算目标角度
+            const targetTheta = (this.theta - 180) / 180 * Math.PI;
+
+            // 计算渐变角度
+            const lerpedTheta = THREE.MathUtils.lerp(this.target.object3D.rotation.y, targetTheta, 0.1); // 这里的0.1是插值因子，控制渐变速度
+
+            // 设置模型的旋转角度
+            this.target.object3D.rotation.set(rotation.x, lerpedTheta, rotation.z);
          }
       }
    }
 
    move(deltaX: number, deltaY: number) {
       this.theta -= deltaX * this.sensitivity.x;
-      this.theta %= 360;
+      //this.theta %= 360;
       this.phi += deltaY * this.sensitivity.y;
-      this.phi = Math.min(85, Math.max(-85, this.phi));
+      this.phi = Math.min(75, Math.max(-75, this.phi));
    }
 
    boundOnMouseDown = (event: MouseEvent) => {
@@ -78,7 +88,7 @@ export class ThirdPersonCamera extends Member {
       }
    }
 
-   setLocked(value:boolean){
-      this.locked=value
+   setLocked(value: boolean) {
+      this.locked = value
    }
 }

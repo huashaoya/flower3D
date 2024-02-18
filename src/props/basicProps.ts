@@ -30,6 +30,10 @@ export const basicProps={
     forwardSpeed:{
         type:Number,
         default:0
+    },
+    rightSpeed:{
+        type:Number,
+        default:0
     }
 }
 

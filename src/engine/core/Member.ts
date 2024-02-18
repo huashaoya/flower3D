@@ -8,6 +8,7 @@ export class Member {
     object3D: THREE.Mesh | null | THREE.Light | THREE.Group
     physicsBody: CANNON.Body | null
     forwardSpeed: number = 0
+    rightSpeed: number = 0
     setters: Record<string, any> = {
         x: this.setX,
         y: this.setY,
@@ -16,7 +17,8 @@ export class Member {
         ry: this.setRy,
         rz: this.setRz,
         scale: this.setScale,
-        forwardSpeed: this.setForwardSpeed
+        forwardSpeed: this.setForwardSpeed,
+        rightSpeed: this.setRightSpeed
     };
 
     constructor(object3D: THREE.Mesh | THREE.Light | null | THREE.Group, physicsBody: CANNON.Body | null = null) {
@@ -41,17 +43,22 @@ export class Member {
         }
     }
     update() {
-        if (this.forwardSpeed != 0&&this.object3D) {
+        if ((this.forwardSpeed != 0||this.rightSpeed != 0) && this.object3D) {
             const direction = new THREE.Vector3(); // 前进方向向量
             // 获取模型的朝向
             this.object3D.getWorldDirection(direction);
             direction.normalize(); // 标准化向量
+            const right = new THREE.Vector3();
+            right.crossVectors(direction, new THREE.Vector3(0, 1, 0));
+
+            // 根据右侧向量和速度来计算移动增量
+            const delta2 = right.multiplyScalar(this.rightSpeed);
 
             // 计算每个方向上的移动增量
             const delta = direction.clone().multiplyScalar(this.forwardSpeed);
 
             // 将增量加到模型的当前位置上
-            this.object3D.position.add(delta);
+            this.object3D.position.add(delta).add(delta2);
         }
 
         this.childrens.forEach(item => {
@@ -64,7 +71,10 @@ export class Member {
 
     }
     setForwardSpeed(speed: number) {
-        this.forwardSpeed = speed/100
+        this.forwardSpeed = speed / 100
+    }
+    setRightSpeed(speed: number) {
+        this.rightSpeed = speed / 100
     }
     setPosition(x: number, y: number, z: number) {
         this.object3D?.position.set(x, y, z)

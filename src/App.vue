@@ -13,25 +13,43 @@ let a = ref(11);
 let aindex = ref(11);
 const cube = ref()
 const speed=ref(0)
+const speedRight=ref(0)
+const locked=ref(false)
 onMounted(() => {
   //cube.value.setColor("green")
 });
-
-const handleKeyUp=(e)=>{
-  let KEY=e.key
-  if(KEY=='w'){
-    speed.value=0
-    aindex.value=11
-  }
-}
 
 const handleKeyDown=(e)=>{
   let KEY=e.key
   if(KEY=='w'){
     speed.value=20
     aindex.value=19
+    locked.value=true
+  }else if(KEY=='d'){
+    speedRight.value=10
+    aindex.value=18
+  }else if(KEY=='a'){
+    speedRight.value=-10
+    aindex.value=17
+  }if(KEY=='s'){
+    speed.value=-20
+    aindex.value=19
   }
 }
+
+const handleKeyUp=(e)=>{
+  let KEY=e.key
+  if(KEY=='w'||KEY=='s'){
+    speed.value=0
+    aindex.value=11
+    locked.value=false
+  }else if(KEY=='d'||KEY=='a'){
+    speedRight.value=0
+    aindex.value=11
+  }
+}
+
+
 </script>
 
 <template>
@@ -58,8 +76,8 @@ const handleKeyDown=(e)=>{
         <SkyBox src="/textures/hdr/003.hdr"></SkyBox>
         <KeyBoard @key-up="handleKeyUp" @key-down="handleKeyDown"></KeyBoard>
         <AmbientLight :intensity="3" />
-        <GLTFModel src="./boxman.glb" :y="-5" :scale="10" :animation-index="aindex" :z="-6" :forward-speed="speed">
-          <ThirdPersonCamera locked></ThirdPersonCamera>
+        <GLTFModel src="./boxman.glb" :y="-5" :scale="10" :animation-index="aindex" :z="-6" :forward-speed="speed" :right-speed="speedRight">
+          <ThirdPersonCamera :locked="locked"></ThirdPersonCamera>
         </GLTFModel>
 
         <GLTFModel src="./m1.glb"  :scale="12" :x="-15" :y="0.5"/>
@@ -85,7 +103,7 @@ const handleKeyDown=(e)=>{
     </div>
 
   </div>
-  <!-- <button v-for="(item, index) in 34" @click="aindex = index">{{ item }}</button> -->
+  <button v-for="(item, index) in 34" @click="aindex = index">{{ item }}</button>
 </template>
 
 <style scoped>
