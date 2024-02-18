@@ -1,12 +1,10 @@
 import { basicProps } from "../basicProps"
+import {IloaderProps} from "../interface/IloaderProps"
 import { objectToKV } from "../utils/objectToKV"
 
 export const modelProps = {
     ...basicProps,
-    src: {
-        type: String,
-        default: "",
-    },
+    ...IloaderProps,
     animations: {
         type: Object,
         default: {},

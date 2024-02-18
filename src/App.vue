@@ -7,9 +7,10 @@ import Sphere from "./components/basic/Sphere.vue";
 import GLTFModel from "./components/model/GLTFModel.vue";
 import ThirdPersonCamera from "./components/camera/ThirdPersonCamera.vue"
 import KeyBoard from "./components/api/KeyBoard.vue"
+import SkyBox from "./components/display/SkyBox.vue"
 import { onMounted, ref } from "vue";
-let a = ref(1);
-let aindex = ref(-1);
+let a = ref(11);
+let aindex = ref(11);
 const cube = ref()
 const speed=ref(0)
 onMounted(() => {
@@ -20,7 +21,7 @@ const handleKeyUp=(e)=>{
   let KEY=e.key
   if(KEY=='w'){
     speed.value=0
-    aindex.value=16
+    aindex.value=11
   }
 }
 
@@ -28,7 +29,7 @@ const handleKeyDown=(e)=>{
   let KEY=e.key
   if(KEY=='w'){
     speed.value=20
-    aindex.value=25
+    aindex.value=19
   }
 }
 </script>
@@ -53,7 +54,8 @@ const handleKeyDown=(e)=>{
       </World>
     </div> -->
     <div class="box2">
-      <World bg="black">
+      <World bg="black" pbr>
+        <SkyBox src="/textures/hdr/003.hdr"></SkyBox>
         <KeyBoard @key-up="handleKeyUp" @key-down="handleKeyDown"></KeyBoard>
         <AmbientLight :intensity="3" />
         <GLTFModel src="./boxman.glb" :y="-5" :scale="10" :animation-index="aindex" :z="-6" :forward-speed="speed">
