@@ -31,9 +31,12 @@ const handleKeyDown=(e)=>{
   }else if(KEY=='a'){
     speedRight.value=-10
     aindex.value=17
-  }if(KEY=='s'){
+  }else if(KEY=='s'){
     speed.value=-20
     aindex.value=19
+  }else if(KEY==' '){
+    //speed.value=-20
+    aindex.value=13
   }
 }
 
@@ -45,6 +48,9 @@ const handleKeyUp=(e)=>{
     locked.value=false
   }else if(KEY=='d'||KEY=='a'){
     speedRight.value=0
+    aindex.value=11
+  }else if(KEY==' '){
+    //speed.value=-20
     aindex.value=11
   }
 }
@@ -78,7 +84,7 @@ const handleKeyUp=(e)=>{
         <DirectionalLight v-bind="{ y: 50, x: 50,z:50 }" :intensity="3"/>
         <AmbientLight :intensity="0" />
         <GLTFModel src="./boxman.glb" :y="-5" :scale="10" :animation-index="aindex" :z="-6" :forward-speed="speed" :right-speed="speedRight">
-          <ThirdPersonCamera :locked="locked"></ThirdPersonCamera>
+          <ThirdPersonCamera :locked="locked" :offset-y="6"></ThirdPersonCamera>
         </GLTFModel>
 
         <GLTFModel src="./m1.glb"  :scale="12" :x="-15" :y="0.5"/>

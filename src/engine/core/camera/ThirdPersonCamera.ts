@@ -11,6 +11,7 @@ export class ThirdPersonCamera extends Member {
    dom: HTMLCanvasElement
    mouseLocked: boolean = false
    locked: boolean = false
+   offsetY:number=0
    sensitivity = {
       x: 0.25,
       y: 0.25
@@ -27,6 +28,8 @@ export class ThirdPersonCamera extends Member {
       this.setters = {
          ...this.setters,
          locked: this.setLocked,
+         offsetY:this.setOffsetY,
+         distance:this.setDistance
       }
    }
 
@@ -38,7 +41,7 @@ export class ThirdPersonCamera extends Member {
          this.camera.position.y = target.y + this.radius * Math.sin(this.phi * Math.PI / 180);
          this.camera.position.z = target.z + this.radius * Math.cos(this.theta * Math.PI / 180) * Math.cos(this.phi * Math.PI / 180);
          this.camera.updateMatrix();
-         this.camera.lookAt(new THREE.Vector3(target.x, target.y + 4, target.z));
+         this.camera.lookAt(new THREE.Vector3(target.x, target.y+this.offsetY, target.z));
          if (this.locked) {
             //this.target.object3D.rotation.set(rotation.x,(this.theta-180)/180*Math.PI,rotation.z)
             // 定义目标角度
@@ -47,7 +50,7 @@ export class ThirdPersonCamera extends Member {
             const targetTheta = (this.theta - 180) / 180 * Math.PI;
 
             // 计算渐变角度
-            const lerpedTheta = THREE.MathUtils.lerp(this.target.object3D.rotation.y, targetTheta, 0.1); // 这里的0.1是插值因子，控制渐变速度
+            const lerpedTheta = THREE.MathUtils.lerp(this.target.object3D.rotation.y, targetTheta, 0.1); // 插值因子，控制渐变速度
 
             // 设置模型的旋转角度
             this.target.object3D.rotation.set(rotation.x, lerpedTheta, rotation.z);
@@ -90,5 +93,11 @@ export class ThirdPersonCamera extends Member {
 
    setLocked(value: boolean) {
       this.locked = value
+   }
+   setOffsetY(value:number){
+      this.offsetY=value
+   }
+   setDistance(value:number){
+      this.radius=value
    }
 }
