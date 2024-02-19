@@ -34,6 +34,18 @@ export const basicProps={
     rightSpeed:{
         type:Number,
         default:0
+    },
+    rxSpeed:{
+        type:Number,
+        default:0
+    },
+    rySpeed:{
+        type:Number,
+        default:0
+    },
+    rzSpeed:{
+        type:Number,
+        default:0
     }
 }
 

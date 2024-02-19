@@ -17,6 +17,7 @@ export class GLTFModel extends Member {
             that.object3D = element;
             element.scale.set(props.scale, props.scale, props.scale);
             element.position.set(props.x, props.y, props.z);
+            element.rotation.set(props.rx,props.ry,props.rz)
             manager.scene.add(element);
 
             for (let i = 0; i < gltf.animations.length; i++) {

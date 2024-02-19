@@ -77,7 +77,7 @@ const handleKeyUp=(e)=>{
         <Cube ref="cube" :x="0.8" :y="-5" v-bind="{ color: 'white', h: 0.2, w: 20, d: 5 }" :mass="0" />
       </World>
     </div> -->
-    <div class="box2">
+    <!-- <div class="box2">
       <World bg="black" pbr>
         <SkyBox src="/textures/hdr/003.hdr"></SkyBox>
         <KeyBoard @key-up="handleKeyUp" @key-down="handleKeyDown"></KeyBoard>
@@ -87,30 +87,36 @@ const handleKeyUp=(e)=>{
           <ThirdPersonCamera :locked="locked" :offset-y="6"></ThirdPersonCamera>
         </GLTFModel>
 
-        <GLTFModel src="./m1.glb"  :scale="12" :x="-15" :y="0.5"/>
+        <GLTFModel src="./m1.glb"  :scale="12" :x="-15" :y="0.5" :ry-speed="1"/>
         <Cube ref="cube" :x="-15"  :y="-4.5" v-bind="{ color: 'white', h: 0.5, w: 4, d: 4 }" />
 
-        <GLTFModel src="./m2.glb"  :scale="12" :x="15" :y="2" :ry="-Math.PI/2"/>
+        <GLTFModel src="./m2.glb"  :scale="12" :x="15" :y="2" :ry="-Math.PI"/>
         <Cube ref="cube" :x="15"  :y="-4.5" v-bind="{ color: 'white', h: 0.5, w: 4, d: 4 }" />
 
         <GLTFModel src="./m3.glb"  :scale="12" :x="-15" :y="0.5" :z="15"/>
         <Cube ref="cube" :x="-15"  :y="-4.5" :z="15" v-bind="{ color: 'white', h: 0.5, w: 4, d: 4 }" />
 
-        <GLTFModel src="./m4.glb"  :scale="12" :x="15" :y="0.5" :z="15"/>
+        <GLTFModel src="./m4.glb"  :scale="12" :x="15" :y="0.5" :z="15" :ry="-Math.PI"/>
         <Cube ref="cube" :x="15"  :y="-4.5" :z="15" v-bind="{ color: 'white', h: 0.5, w: 4, d: 4 }" />
 
         <GLTFModel src="./m5.glb"  :scale="12" :x="-15" :y="0.5" :z="-15"/>
         <Cube ref="cube" :x="-15"  :y="-4.5" :z="-15" v-bind="{ color: 'white', h: 0.5, w: 4, d: 4 }" />
 
-        <GLTFModel src="./m6.glb"  :scale="12" :x="15" :y="0.5" :z="-15"/>
+        <GLTFModel src="./m6.glb"  :scale="12" :x="15" :y="0.5" :z="-15" :ry="-Math.PI"/>
         <Cube ref="cube" :x="15"  :y="-4.5" :z="-15" v-bind="{ color: 'white', h: 0.5, w: 4, d: 4 }" />
 
         <Cube ref="cube" :x="0.8" :y="-5" v-bind="{ color: 'gray', h: 0.2, w: 60, d: 80 }" :mass="0" />
       </World>
+    </div> -->
+     <div class="box">
+      <World bg="green" :id="3" pbr>
+        <AmbientLight :intensity="3" />
+        <DirectionalLight v-bind="{ y: 50, x: 50,z:50 }" :intensity="3"/>
+        <GLTFModel src="./visionPro.glb"  :scale="20"  :ry-speed="0"/>
+      </World>
     </div>
-
   </div>
-  <button v-for="(item, index) in 34" @click="aindex = index">{{ item }}</button>
+  <!-- <button v-for="(item, index) in 34" @click="aindex = index">{{ item }}</button> -->
 </template>
 
 <style scoped>
