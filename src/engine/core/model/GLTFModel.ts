@@ -28,6 +28,13 @@ export class GLTFModel extends Member {
                 that.animationIndex = animationIndex;
                 that.animations[animationIndex].play();
             }
+            if(manager.settings.pbr){
+                gltf.scene.traverse((child) => {
+                    if (child instanceof THREE.Mesh) {
+                        child.castShadow = true; // 设置网格投射阴影
+                    }
+                });
+            }
             that.setters = {
                 ...that.setters,
                 animationIndex: that.setAnimationIndex,

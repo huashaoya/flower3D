@@ -7,10 +7,12 @@ export class DirectionalLight extends MemberWrapper {
 
         const light = new THREE.DirectionalLight(props.color, props.intensity)
         //将范围调大
-        light.shadow.camera.top = 20
-        light.shadow.camera.right = 20
-        light.shadow.camera.left = -20
-        light.shadow.camera.bottom = -20
+        light.shadow.camera.top = 40
+        light.shadow.camera.right = 40
+        light.shadow.camera.left = -40
+        light.shadow.camera.bottom = -40
+        light.shadow.camera.far=500
+        light.shadow.mapSize.set(1024,1024)
         light.castShadow = true;
 
         super(props, manager, light, null)

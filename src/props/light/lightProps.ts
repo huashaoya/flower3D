@@ -1,7 +1,9 @@
 import { IcolorfulProps } from "../interface/IcolorfulProps"
+import { basicProps } from "../basicProps"
 import { objectToKV } from "../utils/objectToKV"
 
 export const lightProps = {
+    ...basicProps,
     ...IcolorfulProps,
     intensity: {
         type: Number,

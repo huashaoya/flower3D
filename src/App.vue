@@ -75,7 +75,8 @@ const handleKeyUp=(e)=>{
       <World bg="black" pbr>
         <SkyBox src="/textures/hdr/003.hdr"></SkyBox>
         <KeyBoard @key-up="handleKeyUp" @key-down="handleKeyDown"></KeyBoard>
-        <AmbientLight :intensity="3" />
+        <DirectionalLight v-bind="{ y: 50, x: 50,z:50 }" :intensity="3"/>
+        <AmbientLight :intensity="0" />
         <GLTFModel src="./boxman.glb" :y="-5" :scale="10" :animation-index="aindex" :z="-6" :forward-speed="speed" :right-speed="speedRight">
           <ThirdPersonCamera :locked="locked"></ThirdPersonCamera>
         </GLTFModel>
@@ -98,7 +99,7 @@ const handleKeyUp=(e)=>{
         <GLTFModel src="./m6.glb"  :scale="12" :x="15" :y="0.5" :z="-15"/>
         <Cube ref="cube" :x="15"  :y="-4.5" :z="-15" v-bind="{ color: 'white', h: 0.5, w: 4, d: 4 }" />
 
-        <Cube ref="cube" :x="0.8" :y="-5" v-bind="{ color: 'gray', h: 0.2, w: 40, d: 60 }" :mass="0" />
+        <Cube ref="cube" :x="0.8" :y="-5" v-bind="{ color: 'gray', h: 0.2, w: 60, d: 80 }" :mass="0" />
       </World>
     </div>
 
