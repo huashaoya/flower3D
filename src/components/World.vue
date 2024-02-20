@@ -20,8 +20,12 @@ manager.setSettings(settings);
 onMounted(() => {
   const style = document.createElement("style");
   style.innerHTML = `.flower3D-world {
+    position: absolute;
     width: 100%;
     height: 100%;
+    top: 0px;
+    left: 0px;
+    display: flex;
   }`;
   document.head.appendChild(style);
   init();
@@ -29,8 +33,12 @@ onMounted(() => {
 });
 
 function init() {
-  manager.scene.background =
-    props.bg == "transparent" ? new THREE.Color() : new THREE.Color(props.bg);
+  if (props.bg == "transparent") {
+    const texture = new THREE.Texture();
+    manager.scene.background = texture
+  }else{
+    manager.scene.background =  new THREE.Color(props.bg);
+  }
   const width = worldRef.value.offsetWidth;
   const height = worldRef.value.offsetHeight;
   manager.updateCamaras(width, height);

@@ -109,7 +109,8 @@ const handleKeyUp=(e:any)=>{
       </World>
     </div>
      <div class="box">
-      <World bg="green" :id="2" pbr>
+      11
+      <World :id="2" pbr>
         <AmbientLight :intensity="3" />
         <DirectionalLight v-bind="{ y: 50, x: 50,z:50 }" :intensity="3"/>
         <GLTFModel src="./visionPro.glb"  :scale="20"  :ry-speed="0"/>
@@ -134,11 +135,14 @@ const handleKeyUp=(e:any)=>{
   border: 2px solid black;
   width: 800px;
   height: 500px;
+  background-color: red;
+  position: relative;
 }
 
 .box2 {
   border: 2px solid black;
   width: 900px;
   height: 600px;
+  position: relative;
 }
 </style>
