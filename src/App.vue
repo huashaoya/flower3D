@@ -19,7 +19,7 @@ onMounted(() => {
   //cube.value.setColor("green")
 });
 
-const handleKeyDown=(e)=>{
+const handleKeyDown=(e:any)=>{
   let KEY=e.key
   if(KEY=='w'){
     speed.value=20
@@ -40,7 +40,7 @@ const handleKeyDown=(e)=>{
   }
 }
 
-const handleKeyUp=(e)=>{
+const handleKeyUp=(e:any)=>{
   let KEY=e.key
   if(KEY=='w'||KEY=='s'){
     speed.value=0
@@ -60,7 +60,7 @@ const handleKeyUp=(e)=>{
 
 <template>
   <div class="wrapper">
-    <!-- <div class="box">
+    <div class="box">
       <button @click="a--">+</button>
       <button @click="a++">-</button>
       <World bg="black" :id="3" pbr>
@@ -76,8 +76,8 @@ const handleKeyUp=(e)=>{
         <cube v-bind="{ color: 'green', y: -3, z: -5 }" />
         <Cube ref="cube" :x="0.8" :y="-5" v-bind="{ color: 'white', h: 0.2, w: 20, d: 5 }" :mass="0" />
       </World>
-    </div> -->
-    <!-- <div class="box2">
+    </div>
+    <div class="box2">
       <World bg="black" pbr>
         <SkyBox src="/textures/hdr/003.hdr"></SkyBox>
         <KeyBoard @key-up="handleKeyUp" @key-down="handleKeyDown"></KeyBoard>
@@ -107,9 +107,9 @@ const handleKeyUp=(e)=>{
 
         <Cube ref="cube" :x="0.8" :y="-5" v-bind="{ color: 'gray', h: 0.2, w: 60, d: 80 }" :mass="0" />
       </World>
-    </div> -->
+    </div>
      <div class="box">
-      <World bg="green" :id="3" pbr>
+      <World bg="green" :id="2" pbr>
         <AmbientLight :intensity="3" />
         <DirectionalLight v-bind="{ y: 50, x: 50,z:50 }" :intensity="3"/>
         <GLTFModel src="./visionPro.glb"  :scale="20"  :ry-speed="0"/>

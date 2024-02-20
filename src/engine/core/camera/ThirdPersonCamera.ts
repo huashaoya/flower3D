@@ -65,7 +65,7 @@ export class ThirdPersonCamera extends Member {
       this.phi = Math.min(75, Math.max(-75, this.phi));
    }
 
-   boundOnMouseDown = (event: MouseEvent) => {
+   boundOnMouseDown = () => {
       if (this.mouseLocked == false) {
          this.dom.requestPointerLock()
       }
@@ -81,7 +81,7 @@ export class ThirdPersonCamera extends Member {
 
    }
 
-   onPointerlockChange = (event: any) => {
+   onPointerlockChange = () => {
       if (document.pointerLockElement == this.dom) {
          this.dom.addEventListener('mousemove', this.boundOnMouseMove, false);
          this.mouseLocked = true;
