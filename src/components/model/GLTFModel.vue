@@ -15,6 +15,7 @@ const member = new GLTFModel(props, manager,props.animationIndex);
 let oldProps = ref(modelPropsKV);
 useChange(props, oldProps, member,manager);
 defineExpose(member)
+
 </script>
 
 <template><slot></slot></template>

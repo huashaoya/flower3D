@@ -1,5 +1,4 @@
 //一个世界的全局管理对象
-
 import { Member } from "./Member"
 import * as THREE from "three";
 import * as CANNON from "cannon-es"
@@ -35,6 +34,7 @@ export class Manager {
         this.animationMixer = new THREE.AnimationMixer(this.scene)
     }
 
+
     update(): void {
         let deltaTime = this.clock.getDelta();
         //如果开启了物理
@@ -55,7 +55,8 @@ export class Manager {
         this.settings = setting
     }
 
-    updateCamaras(width: number, height: number): void {
+    updateCamarasAndRenderer(width: number, height: number): void {
+        //相机相关
         this.cameras.forEach(item => {
             item.aspect = width / height
             item.updateProjectionMatrix()
@@ -63,10 +64,16 @@ export class Manager {
         this.cameras[0].position.z = 10
         //渲染器相关
         this.renderer.setSize(width, height)
+        this.renderer.shadowMap.enabled = this.settings.pbr;
+        //控制器相关
         this.controls = new OrbitControls(this.cameras[0], this.renderer.domElement);
         this.controls.enableDamping = true;
-
-        this.renderer.shadowMap.enabled = this.settings.pbr;
     }
 
+    remove(member:Member){
+        let index=this.members.indexOf(member)
+        this.members.splice(index,1)
+        if(member.object3D)this.scene.remove(member.object3D)
+        
+    }
 }

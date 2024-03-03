@@ -5,7 +5,7 @@ import * as CANNON from "cannon-es"
 
 export class Member {
     childrens: Member[] = []
-    object3D: THREE.Mesh | null | THREE.Light | THREE.Group
+    object3D: THREE.Mesh | THREE.Light | THREE.Group | null
     physicsBody: CANNON.Body | null
     forwardSpeed: number = 0
     rightSpeed: number = 0
@@ -37,6 +37,23 @@ export class Member {
             this.object3D?.add(member.object3D)
         }
     }
+    remove(member: Member) {
+        let index = this.childrens.indexOf(member)
+        this.childrens.splice(index, 1)
+        if (member.object3D) {
+            this.object3D?.remove(member.object3D)
+        }
+    }
+    dispose() {
+        if (this.object3D?.type === 'Mesh') {
+            //@ts-ignore
+            this.object3D.geometry.dispose()
+            //@ts-ignore
+            this.object3D.material.dispose()
+        }
+
+
+    }
     updateFromPhysics() {
         this.childrens.forEach(item => {
             item.updateFromPhysics()
@@ -65,7 +82,7 @@ export class Member {
         }
         if ((this.rxSpeed != 0 || this.rySpeed != 0 || this.rzSpeed != 0) && this.object3D) {
             const rotation = this.object3D.rotation
-            const delta = new THREE.Vector3(this.rxSpeed/100, this.rySpeed/100, this.rzSpeed/100)
+            const delta = new THREE.Vector3(this.rxSpeed / 100, this.rySpeed / 100, this.rzSpeed / 100)
             this.object3D.rotation.set(rotation.x + delta.x, rotation.y + delta.y, rotation.z + delta.z)
         }
         this.childrens.forEach(item => {

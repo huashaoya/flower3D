@@ -2,12 +2,13 @@
 import * as THREE from "three";
 
 import { worldProps } from "../props/worldProps";
-import { onMounted, provide, ref } from "vue";
+import { onMounted, provide, ref ,onUnmounted} from "vue";
 import { ManagerBuilder } from "../engine/ManagerBuilder";
 
 const worldRef = ref();
 const props = defineProps(worldProps);
 const manager = ManagerBuilder.getManager(props.id);
+let resizeObserver:ResizeObserver
 
 const settings = {
   pbr: props.pbr,
@@ -32,25 +33,41 @@ onMounted(() => {
   animate();
 });
 
+
+
 function init() {
   if (props.bg == "transparent") {
     const texture = new THREE.Texture();
     manager.scene.background = texture
-  }else{
-    manager.scene.background =  new THREE.Color(props.bg);
+  } else {
+    manager.scene.background = new THREE.Color(props.bg);
   }
   const width = worldRef.value.offsetWidth;
   const height = worldRef.value.offsetHeight;
-  manager.updateCamaras(width, height);
-  provide("width", width);
-  provide("height", height);
+  manager.updateCamarasAndRenderer(width, height);
+  //provide("width", width);
+  //provide("height", height);
   worldRef?.value.appendChild(manager.renderer.domElement);
+
+  //响应世界窗口变化
+  resizeObserver = new ResizeObserver(entries => {
+    for (const entry of entries) {
+      const { width, height } = entry.contentRect;
+      manager.updateCamarasAndRenderer(width, height);
+    }
+  });
+  resizeObserver.observe(worldRef.value);
 }
 
 function animate() {
   requestAnimationFrame(animate);
   manager.update();
 }
+
+onUnmounted(()=>{
+  console.log('世界卸载了1')
+  resizeObserver.disconnect();
+})
 </script>
 
 <template>
@@ -58,4 +75,3 @@ function animate() {
     <slot></slot>
   </div>
 </template>
-

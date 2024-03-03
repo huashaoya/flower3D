@@ -4,10 +4,8 @@ import { Member } from "./Member";
 import { Manager } from "./Manager";
 
 export class MemberWrapper extends Member {
-    constructor(props: Record<string, any>,manager:Manager,mesh:THREE.Mesh|THREE.Light|THREE.Group,shape:CANNON.Shape|null) {
-
-
-        if (manager.settings?.pbr&&shape&&mesh) {
+    constructor(props: Record<string, any>, manager: Manager, mesh: THREE.Mesh | THREE.Light | THREE.Group, shape: CANNON.Shape | null) {
+        if (manager.settings?.pbr && shape && mesh) {
             mesh.castShadow = true;
             mesh.receiveShadow = true;
         }
@@ -15,7 +13,7 @@ export class MemberWrapper extends Member {
 
         let body = null;
         //如果开启了物理
-        if (manager.settings.physics&&shape) {
+        if (manager.settings.physics && shape) {
             const material = new CANNON.Material();
             body = new CANNON.Body({
                 shape: shape,

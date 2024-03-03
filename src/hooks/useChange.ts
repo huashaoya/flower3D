@@ -1,4 +1,4 @@
-import { Ref, inject, provide, ref, toRaw, watch, watchEffect } from 'vue';
+import { Ref, inject, onUnmounted, provide, ref, toRaw, watch, watchEffect } from 'vue';
 
 export default function useChange(props: any, oldProps: any, member: any,manager:any) {
     const changedProperties = ref<String[]>([]);
@@ -41,4 +41,15 @@ export default function useChange(props: any, oldProps: any, member: any,manager
             }   
         }
     })
+
+    onUnmounted(()=>{
+        //console.log(6668)
+        member.dispose()
+        if(parentRef){
+            toRaw(parentRef?.value)?.remove(member)
+        }else{
+            manager.remove(member)
+        }
+    })
+      
 }

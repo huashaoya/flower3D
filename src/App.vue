@@ -60,23 +60,6 @@ const handleKeyUp=(e:any)=>{
 
 <template>
   <div class="wrapper">
-    <div class="box">
-      <button @click="a--">+</button>
-      <button @click="a++">-</button>
-      <World bg="black" :id="3" pbr>
-       
-        <cube v-bind="{ color: 'green', y: 2 }" />
-        <AmbientLight :intensity="3" />
-        <DirectionalLight v-bind="{ y: 5, x: 3 }" />
-        <sphere v-bind="{ color: 'blue', x: -3, mass: 10 }"> </sphere>
-        <sphere v-bind="{ color: 'yellow', x: a, r: 0.5 ,z:0}">
-          <ThirdPersonCamera></ThirdPersonCamera>
-        </sphere>
-        <cube v-bind="{ color: 'brown', y: -2, w: 10 }" /> 
-        <cube v-bind="{ color: 'green', y: -3, z: -5 }" />
-        <Cube ref="cube" :x="0.8" :y="-5" v-bind="{ color: 'white', h: 0.2, w: 20, d: 5 }" :mass="0" />
-      </World>
-    </div>
     <div class="box2">
       <World bg="black" pbr>
         <SkyBox src="/textures/hdr/003.hdr"></SkyBox>
@@ -108,16 +91,8 @@ const handleKeyUp=(e:any)=>{
         <Cube ref="cube" :x="0.8" :y="-5" v-bind="{ color: 'gray', h: 0.2, w: 60, d: 80 }" :mass="0" />
       </World>
     </div>
-     <div class="box">
-      11
-      <World :id="2" pbr>
-        <AmbientLight :intensity="3" />
-        <DirectionalLight v-bind="{ y: 50, x: 50,z:50 }" :intensity="3"/>
-        <GLTFModel src="./visionPro.glb"  :scale="20"  :ry-speed="0"/>
-      </World>
-    </div>
   </div>
-  <!-- <button v-for="(item, index) in 34" @click="aindex = index">{{ item }}</button> -->
+  <button v-for="(item, index) in 34" @click="aindex = index">{{ item }}</button>
 </template>
 
 <style scoped>
