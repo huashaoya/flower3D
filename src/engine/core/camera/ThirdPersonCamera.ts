@@ -51,10 +51,13 @@ export class ThirdPersonCamera extends Member {
 
             this.theta -= circle * 360
             targetTheta -= circle * 2 * Math.PI
-            
-            if (Math.abs(delta % (Math.PI * 2)) > Math.PI) {
+
+            if (delta % (Math.PI * 2) > Math.PI) {
                this.theta -= 360
                targetTheta -= 2 * Math.PI
+            } else if (delta % (Math.PI * 2) < -Math.PI) {
+               this.theta += 360
+               targetTheta += 2 * Math.PI
             }
 
             const lerpedTheta = THREE.MathUtils.lerp(this.target.object3D.rotation.y, targetTheta, 0.1);
