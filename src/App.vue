@@ -66,11 +66,14 @@ const handleKeyUp=(e:any)=>{
         <KeyBoard @key-up="handleKeyUp" @key-down="handleKeyDown"></KeyBoard>
         <DirectionalLight v-bind="{ y: 50, x: 50,z:50 }" :intensity="3"/>
         <AmbientLight :intensity="0" />
+        <!-- <GLTFModel src="./boxman.glb" :y="-5" :scale="10" :animation-index="aindex" :z="-6">
+         
+        </GLTFModel> -->
         <GLTFModel src="./boxman.glb" :y="-5" :scale="10" :animation-index="aindex" :z="-6" :forward-speed="speed" :right-speed="speedRight">
           <ThirdPersonCamera :locked="locked" :offset-y="6"></ThirdPersonCamera>
         </GLTFModel>
-
-        <GLTFModel src="./m1.glb"  :scale="12" :x="-15" :y="0.5" :ry-speed="1"/>
+       
+        <!-- <GLTFModel src="./m1.glb"  :scale="12" :x="-15" :y="0.5" :ry-speed="1"/>
         <Cube ref="cube" :x="-15"  :y="-4.5" v-bind="{ color: 'white', h: 0.5, w: 4, d: 4 }" />
 
         <GLTFModel src="./m2.glb"  :scale="12" :x="15" :y="2" :ry="-Math.PI"/>
@@ -86,7 +89,7 @@ const handleKeyUp=(e:any)=>{
         <Cube ref="cube" :x="-15"  :y="-4.5" :z="-15" v-bind="{ color: 'white', h: 0.5, w: 4, d: 4 }" />
 
         <GLTFModel src="./m6.glb"  :scale="12" :x="15" :y="0.5" :z="-15" :ry="-Math.PI"/>
-        <Cube ref="cube" :x="15"  :y="-4.5" :z="-15" v-bind="{ color: 'white', h: 0.5, w: 4, d: 4 }" />
+        <Cube ref="cube" :x="15"  :y="-4.5" :z="-15" v-bind="{ color: 'white', h: 0.5, w: 4, d: 4 }" /> -->
 
         <Cube ref="cube" :x="0.8" :y="-5" v-bind="{ color: 'gray', h: 0.2, w: 60, d: 80 }" :mass="0" />
       </World>

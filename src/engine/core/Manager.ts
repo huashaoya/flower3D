@@ -6,7 +6,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export class Manager {
     //动画管理器
-    animationMixer:THREE.AnimationMixer;
+    animationMixers:THREE.AnimationMixer[]=[];
     //时钟
     clock: THREE.Clock = new THREE.Clock();
     //相机组
@@ -31,7 +31,6 @@ export class Manager {
 
     constructor() {
         this.cannonWorld.gravity.set(0, -9.8, 0)
-        this.animationMixer = new THREE.AnimationMixer(this.scene)
     }
 
 
@@ -47,7 +46,10 @@ export class Manager {
         this.members.forEach(item => {
             item.update()
         })
-        this.animationMixer.update(deltaTime);
+
+        this.animationMixers.forEach(item=>{
+            item.update(deltaTime);
+        })
         this.renderer.render(this.scene, this.cameras[this.cameraActiveIndex]);
     }
 
@@ -74,6 +76,5 @@ export class Manager {
         let index=this.members.indexOf(member)
         this.members.splice(index,1)
         if(member.object3D)this.scene.remove(member.object3D)
-        
     }
 }

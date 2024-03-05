@@ -65,7 +65,6 @@ function animate() {
 }
 
 onUnmounted(()=>{
-  console.log('世界卸载了1')
   resizeObserver.disconnect();
 })
 </script>

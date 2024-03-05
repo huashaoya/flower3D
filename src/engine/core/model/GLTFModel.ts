@@ -18,15 +18,18 @@ export class GLTFModel extends Member {
             element.position.set(props.x, props.y, props.z);
             element.rotation.set(props.rx, props.ry, props.rz)
             manager.scene.add(element);
-
-            for (let i = 0; i < gltf.animations.length; i++) {
-                const action = manager.animationMixer.clipAction(gltf.animations[i]);
-                action.clampWhenFinished = true;
-                that.animations.push(action);
-            }
-            if (animationIndex >= 0) {
-                that.animationIndex = animationIndex;
-                that.animations[animationIndex].play()
+            if (gltf.animations.length > 0) {
+                const animationMixer = new THREE.AnimationMixer(element)
+                manager.animationMixers.push(animationMixer)
+                for (let i = 0; i < gltf.animations.length; i++) {
+                    const action = animationMixer.clipAction(gltf.animations[i]);
+                    action.clampWhenFinished = true;
+                    that.animations.push(action);
+                }
+                if (animationIndex >= 0) {
+                    that.animationIndex = animationIndex;
+                    that.animations[animationIndex].play()
+                }
             }
             if (manager.settings.pbr) {
                 gltf.scene.traverse((child) => {
@@ -35,7 +38,6 @@ export class GLTFModel extends Member {
                     }
                 });
             }
-            console.log(that.animations)
             that.setters = {
                 ...that.setters,
                 animationIndex: that.setAnimationIndex,
@@ -44,7 +46,6 @@ export class GLTFModel extends Member {
 
     }
     setAnimationIndex(index: number) {
-        console.log(index)
         if (index >= 0 && index < this.animations.length) {
             const nextAnimation = this.animations[index];
             const currentAnimation = this.animations[this.animationIndex];
