@@ -17,6 +17,10 @@ export const modelProps = {
         type: Number,
         default: -1,
     },
+    type:{
+        type: String,
+        default: "none",
+    }
 }
 
 export const modelPropsKV:Record<string,any>=objectToKV(modelProps)

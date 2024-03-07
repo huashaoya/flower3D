@@ -55,16 +55,21 @@ export class Member {
 
     }
     updateFromPhysics() {
-        this.childrens.forEach(item => {
-            item.updateFromPhysics()
-        })
+       
+        // this.childrens.forEach(item => {
+        //     item.updateFromPhysics()
+        // })
         if (this.object3D && this.physicsBody) {
+            //console.log(this.object3D )
             const position = new THREE.Vector3(this.physicsBody.position.x, this.physicsBody.position.y, this.physicsBody.position.z);
             const quaternion = new THREE.Quaternion(this.physicsBody.quaternion.x, this.physicsBody.quaternion.y, this.physicsBody.quaternion.z, this.physicsBody.quaternion.w);
             this.object3D.position.copy(position);
             this.object3D.quaternion.copy(quaternion);
         }
     }
+    // setPhysicsBody(physicsBody: CANNON.Body | null){
+
+    // }
     update() {
         if ((this.forwardSpeed != 0 || this.rightSpeed != 0) && this.object3D) {
             const direction = new THREE.Vector3(); // 前进方向向量

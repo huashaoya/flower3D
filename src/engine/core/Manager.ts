@@ -3,12 +3,13 @@ import { Member } from "./Member"
 import * as THREE from "three";
 import * as CANNON from "cannon-es"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-
+import cannonDebugger from "cannon-es-debugger"
 export class Manager {
     //动画管理器
     animationMixers:THREE.AnimationMixer[]=[];
     //时钟
     clock: THREE.Clock = new THREE.Clock();
+    debug:any
     //相机组
     cameras: THREE.PerspectiveCamera[] = [new THREE.PerspectiveCamera(75, 1, 0.1, 1000)];
     cameraActiveIndex: number = 0
@@ -31,10 +32,12 @@ export class Manager {
 
     constructor() {
         this.cannonWorld.gravity.set(0, -9.8, 0)
+        this.debug = cannonDebugger(this.scene, this.cannonWorld)
     }
 
 
     update(): void {
+        this.debug.update()
         let deltaTime = this.clock.getDelta();
         //如果开启了物理
         if (this.settings.physics) {

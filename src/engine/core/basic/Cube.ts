@@ -2,6 +2,7 @@ import * as THREE from "three";
 import * as CANNON from "cannon-es"
 import { MemberWrapper } from "../MemberWrapper";
 import { Manager } from "../Manager";
+import { threeToCannon, ShapeType } from 'three-to-cannon';
 
 export class Cube extends MemberWrapper {
     constructor(props: Record<string, any>, manager: Manager) {
@@ -15,8 +16,9 @@ export class Cube extends MemberWrapper {
         const shape = new CANNON.Box(
             new CANNON.Vec3(props.w*props.scale / 2, props.h*props.scale / 2, props.scale / 2)
         );
-
-        super(props, manager, element, shape)
+        const shape2= threeToCannon(element, {type: ShapeType.BOX});
+            //@ts-ignore
+        super(props, manager, element, shape2?.shape)
         this.setters={
             ...this.setters,
             color:this.setColor

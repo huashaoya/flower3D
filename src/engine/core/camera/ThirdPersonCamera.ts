@@ -43,7 +43,6 @@ export class ThirdPersonCamera extends Member {
          this.camera.updateMatrix();
          this.camera.lookAt(new THREE.Vector3(target.x, target.y + this.offsetY, target.z));
          if (this.locked) {
-            // 计算目标角度
             let targetTheta = (this.theta - 180) / 180 * Math.PI;
             const delta = targetTheta - this.target.object3D.rotation.y
 
