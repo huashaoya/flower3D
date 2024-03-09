@@ -11,7 +11,7 @@ export const thirdPersonCameraProps = {
     },
     distance:{
         type:Number,
-        default:20
+        default:2
     }
 }
 

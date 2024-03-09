@@ -11,7 +11,7 @@ let id: number = inject("id", 1);
 const parentRef = inject<Ref | undefined>("parent", undefined)
 
 const manager = ManagerBuilder.getManager(id);
-const member = new ThirdPersonCamera(manager, toRaw(parentRef?.value));
+const member = new ThirdPersonCamera(props,manager, toRaw(parentRef?.value));
 
 let oldProps = ref(thirdPersonCameraPropsKV);
 useChange(props, oldProps, member,manager);

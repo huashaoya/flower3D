@@ -16,11 +16,12 @@ export class ThirdPersonCamera extends Member {
       x: 0.25,
       y: 0.25
    }
-   constructor(manager: Manager, target: Member) {
+   constructor(props: Record<string, any>, manager: Manager, target: Member) {
       super(null, null)
       this.camera = new THREE.PerspectiveCamera(75, manager.renderer.domElement.offsetWidth / manager.renderer.domElement.offsetHeight, 0.1, 1000)
       this.camera.position.z = 10
       this.target = target
+      this.radius = props.distance
       manager.cameraActiveIndex = (manager.cameras.push(this.camera) - 1)
       this.dom = manager.renderer.domElement
       this.dom.addEventListener('mousedown', this.boundOnMouseDown, false);

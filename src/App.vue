@@ -94,7 +94,7 @@ const handleKeyUp=(e:any)=>{
 
         <Cube ref="cube" :x="0.8" :y="-5" v-bind="{ color: 'gray', h: 0.2, w: 60, d: 80 }" :mass="0" />
       </World> -->
-      <World bg="black" physics pbr physics-debug>
+      <World bg="black" physics pbr >
         <AmbientLight :intensity="0" />
         <KeyBoard @key-up="handleKeyUp" @key-down="handleKeyDown"></KeyBoard>
         <SkyBox src="/textures/hdr/003.hdr"></SkyBox>
@@ -113,7 +113,7 @@ const handleKeyUp=(e:any)=>{
         <!-- <GLTFModel src="./trimesh-type.glb"  :scale="2" type="trimesh" :x="30" />
         <GLTFModel src="./trimesh-type.glb"  :scale="2" type="map" :x="-30" /> -->
         <GLTFModel src="./boxman.glb" type="character" :y="20" :scale="1" :animation-index="aindex"  :forward-speed="speed" :right-speed="speedRight">
-          <ThirdPersonCamera :locked="true" :offset-y="0.9"></ThirdPersonCamera>
+          <ThirdPersonCamera :locked="locked" :offset-y="0.9" :distance="2"></ThirdPersonCamera>
         </GLTFModel>
         <Sphere  :y="20"></Sphere>
         <Sphere  :y="20" :x="3"></Sphere>
