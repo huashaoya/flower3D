@@ -1,5 +1,5 @@
 import { BufferAttribute, BufferGeometry, Mesh, Object3D, Quaternion, Vector3 } from 'three';
-
+import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
 const _v1 = new Vector3();
 const _v2 = new Vector3();
 const _q1 = new Quaternion();
@@ -9,7 +9,7 @@ const _q1 = new Quaternion();
 * its geometries are automatically merged. Bake world scale into each
 * geometry, because we can't easily apply that to the cannonjs shapes later.
 */
-export function getGeometry (object: Object3D): BufferGeometry | null {
+export function getGeometry(object: Object3D): BufferGeometry | null {
 	const meshes = getMeshes(object);
 	if (meshes.length === 0) return null;
 
@@ -17,7 +17,6 @@ export function getGeometry (object: Object3D): BufferGeometry | null {
 	if (meshes.length === 1) {
 		return normalizeGeometry(meshes[0]);
 	}
-
 	// Multiple meshes. Merge and return.
 	let mesh: Mesh | undefined;
 	const geometries: BufferGeometry[] = [];
@@ -29,101 +28,52 @@ export function getGeometry (object: Object3D): BufferGeometry | null {
 	return mergeBufferGeometries(geometries);
 }
 function normalizeGeometry(mesh: Mesh): BufferGeometry {
-    // 克隆原始几何体以保留原始数据
-    const geometry: BufferGeometry = mesh.geometry.clone();
+	// 克隆原始几何体以保留原始数据
+	const geometry: BufferGeometry = mesh.geometry.clone();
 
-    // 确保几何体使用的是BufferGeometry
-    if (!geometry.isBufferGeometry) {
-        console.error('Geometry is not a BufferGeometry.');
-        return geometry;
-    }
+	// 确保几何体使用的是BufferGeometry
+	if (!geometry.isBufferGeometry) {
+		console.error('Geometry is not a BufferGeometry.');
+		return geometry;
+	}
 
-    // 更新世界矩阵
-    mesh.updateMatrixWorld();
+	// 更新世界矩阵
+	//mesh.updateMatrixWorld();
+	// 获取顶点位置属性
+	const positionAttribute = geometry.attributes.position;
+	const positionArray = positionAttribute.array;
 
-    // 获取顶点位置属性
-    const positionAttribute = geometry.attributes.position;
-    const positionArray = positionAttribute.array;
+	// 创建一个新的浮点数组来存储变换后的顶点位置
+	const transformedPositionArray = new Float32Array(positionArray.length);
 
-    // 创建一个新的浮点数组来存储变换后的顶点位置
-    const transformedPositionArray = new Float32Array(positionArray.length);
+	// 临时向量用于存储和变换每个顶点位置
+	const vertex = new Vector3();
 
-    // 临时向量用于存储和变换每个顶点位置
-    const vertex = new Vector3();
+	// 遍历每个顶点，应用变换
+	for (let i = 0; i < positionArray.length; i += 3) {
+		vertex.set(positionArray[i], positionArray[i + 1], positionArray[i + 2]);
+		// 应用mesh的世界矩阵变换到顶点
 
-    // 遍历每个顶点，应用变换
-    for (let i = 0; i < positionArray.length; i += 3) {
-        vertex.set(positionArray[i], positionArray[i + 1], positionArray[i + 2]);
-        // 应用mesh的世界矩阵变换到顶点
-        vertex.applyMatrix4(mesh.matrixWorld);
-        transformedPositionArray[i] = vertex.x;
-        transformedPositionArray[i + 1] = vertex.y;
-        transformedPositionArray[i + 2] = vertex.z;
-    }
+		vertex.applyMatrix4(mesh.matrixWorld);
+		transformedPositionArray[i] = vertex.x;
+		transformedPositionArray[i + 1] = vertex.y;
+		transformedPositionArray[i + 2] = vertex.z;
+	}
 
-    // 使用变换后的顶点位置更新几何体
-    geometry.setAttribute('position', new BufferAttribute(transformedPositionArray, 3));
-
-    return geometry;
+	// 使用变换后的顶点位置更新几何体
+	geometry.setAttribute('position', new BufferAttribute(transformedPositionArray, 3));
+	
+	return geometry;
 }
 /**
  * Greatly simplified version of BufferGeometryUtils.mergeBufferGeometries.
  * Because we only care about the vertex positions, and not the indices or
  * other attributes, we throw everything else away.
  */
-function mergeBufferGeometries(geometries) {
-    let vertexCount = 0;
-    let indexCount = 0;
-
-    // 首先计算总顶点数和总索引数
-    geometries.forEach(geometry => {
-        const position = geometry.attributes.position;
-        if (position && position.itemSize === 3) {
-            vertexCount += position.count;
-        }
-        const index = geometry.index;
-        if (index) {
-            indexCount += index.count;
-        }
-    });
-
-    // 创建新的顶点数组和索引数组
-    const positionArray = new Float32Array(vertexCount * 3);
-    const indexArray = new Uint32Array(indexCount);
-
-    let positionOffset = 0;
-    let indexOffset = 0;
-    let vertexOffset = 0; // 当前顶点偏移量
-
-    geometries.forEach(geometry => {
-        const position = geometry.attributes.position;
-        if (position && position.itemSize === 3) {
-            positionArray.set(position.array, positionOffset);
-            positionOffset += position.array.length;
-        }
-
-        const index = geometry.index;
-        if (index) {
-            for (let i = 0; i < index.count; i++) {
-                // 调整索引值，并写入新的索引数组
-                indexArray[indexOffset++] = index.array[i] + vertexOffset;
-            }
-
-            // 更新顶点偏移量，供下一个几何体的索引调整使用
-            vertexOffset += position.count;
-        }
-    });
-
-    // 创建新的BufferGeometry并设置属性
-    const mergedGeometry = new BufferGeometry();
-    mergedGeometry.setAttribute('position', new BufferAttribute(positionArray, 3));
-    if (indexCount > 0) { // 如果有索引数据，设置索引属性
-        mergedGeometry.setIndex(new BufferAttribute(indexArray, 1));
-    }
-
-    return mergedGeometry;
+function mergeBufferGeometries(geometries:BufferGeometry[]) {
+	return BufferGeometryUtils.mergeGeometries(geometries, false);
 }
-export function getVertices (geometry: BufferGeometry): Float32Array {
+export function getVertices(geometry: BufferGeometry): Float32Array {
 	const position = geometry.attributes.position;
 	const vertices = new Float32Array(position.count * 3);
 	for (let i = 0; i < position.count; i++) {
@@ -140,23 +90,18 @@ export function getVertices (geometry: BufferGeometry): Float32Array {
 * as mesh.userData.matrix, so that each mesh has its position/rotation/scale
 * independently of all of its parents except the top-level object.
 */
-function getMeshes (object: Object3D): Mesh[] {
-	console.log(3)
+function getMeshes(object: Object3D): Mesh[] {
 	const meshes: Mesh[] = [];
 	object.traverse(function (o) {
 		if ((o as Mesh).isMesh) {
-			//let s1=o.scale
-			//let s2=object.scale
-			//o.scale.set(s1.x*s2.x,s1.y*s2.y,s1.z*s2.z)
 			meshes.push(o as Mesh);
 		}
 	});
-	console.log(meshes)
 	return meshes;
 }
 
 export function getComponent(v: Vector3, component: string): number {
-	switch(component) {
+	switch (component) {
 		case 'x': return v.x;
 		case 'y': return v.y;
 		case 'z': return v.z;
@@ -172,15 +117,15 @@ export function getComponent(v: Vector3, component: string): number {
 * @param {number} tolerance
 * @return {THREE.BufferGeometry>}
 */
-function simplifyGeometry (geometry: BufferGeometry, tolerance = 1e-4): BufferGeometry {
+function simplifyGeometry(geometry: BufferGeometry, tolerance = 1e-4): BufferGeometry {
 
-	tolerance = Math.max( tolerance, Number.EPSILON );
+	tolerance = Math.max(tolerance, Number.EPSILON);
 
 	// Generate an index buffer if the geometry doesn't have one, or optimize it
 	// if it's already available.
-	const hashToIndex: {[key: string]: number} = {};
+	const hashToIndex: { [key: string]: number } = {};
 	const indices = geometry.getIndex();
-	const positions = geometry.getAttribute( 'position' );
+	const positions = geometry.getAttribute('position');
 	const vertexCount = indices ? indices.count : positions.count;
 
 	// Next value for triangle indices.
@@ -190,36 +135,36 @@ function simplifyGeometry (geometry: BufferGeometry, tolerance = 1e-4): BufferGe
 	const newPositions = [];
 
 	// Convert the error tolerance to an amount of decimal places to truncate to.
-	const decimalShift = Math.log10( 1 / tolerance );
-	const shiftMultiplier = Math.pow( 10, decimalShift );
+	const decimalShift = Math.log10(1 / tolerance);
+	const shiftMultiplier = Math.pow(10, decimalShift);
 
-	for ( let i = 0; i < vertexCount; i ++ ) {
+	for (let i = 0; i < vertexCount; i++) {
 
-		const index = indices ? indices.getX( i ) : i;
+		const index = indices ? indices.getX(i) : i;
 
 		// Generate a hash for the vertex attributes at the current index 'i'.
 		let hash = '';
 
 		// Double tilde truncates the decimal value.
-		hash += `${ ~ ~ ( positions.getX( index ) * shiftMultiplier ) },`;
-		hash += `${ ~ ~ ( positions.getY( index ) * shiftMultiplier ) },`;
-		hash += `${ ~ ~ ( positions.getZ( index ) * shiftMultiplier ) },`;
+		hash += `${~ ~(positions.getX(index) * shiftMultiplier)},`;
+		hash += `${~ ~(positions.getY(index) * shiftMultiplier)},`;
+		hash += `${~ ~(positions.getZ(index) * shiftMultiplier)},`;
 
 		// Add another reference to the vertex if it's already
 		// used by another index.
-		if ( hash in hashToIndex ) {
+		if (hash in hashToIndex) {
 
-			newIndices.push( hashToIndex[ hash ] );
+			newIndices.push(hashToIndex[hash]);
 
 		} else {
 
-			newPositions.push( positions.getX( index ) );
-			newPositions.push( positions.getY( index ) );
-			newPositions.push( positions.getZ( index ) );
+			newPositions.push(positions.getX(index));
+			newPositions.push(positions.getY(index));
+			newPositions.push(positions.getZ(index));
 
-			hashToIndex[ hash ] = nextIndex;
-			newIndices.push( nextIndex );
-			nextIndex ++;
+			hashToIndex[hash] = nextIndex;
+			newIndices.push(nextIndex);
+			nextIndex++;
 
 		}
 
@@ -228,14 +173,14 @@ function simplifyGeometry (geometry: BufferGeometry, tolerance = 1e-4): BufferGe
 	// Construct merged BufferGeometry.
 
 	const positionAttribute = new BufferAttribute(
-		new Float32Array( newPositions ),
+		new Float32Array(newPositions),
 		positions.itemSize,
 		positions.normalized
 	);
 
 	const result = new BufferGeometry();
-	result.setAttribute( 'position', positionAttribute );
-	result.setIndex( newIndices );
+	result.setAttribute('position', positionAttribute);
+	result.setIndex(newIndices);
 
 	return result;
 

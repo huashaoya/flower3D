@@ -12,6 +12,7 @@ export class Member {
     rxSpeed: number = 0
     rySpeed: number = 0
     rzSpeed: number = 0
+    type:string="none"
     setters: Record<string, any> = {
         x: this.setX,
         y: this.setY,
@@ -26,7 +27,6 @@ export class Member {
         rySpeed: this.setRySpeed,
         rzSpeed: this.setRzSpeed
     };
-
     constructor(object3D: THREE.Mesh | THREE.Light | null | THREE.Group, physicsBody: CANNON.Body | null = null) {
         this.object3D = object3D
         this.physicsBody = physicsBody
@@ -37,6 +37,7 @@ export class Member {
             this.object3D?.add(member.object3D)
         }
     }
+    //移除子对象
     remove(member: Member) {
         let index = this.childrens.indexOf(member)
         this.childrens.splice(index, 1)
@@ -44,6 +45,7 @@ export class Member {
             this.object3D?.remove(member.object3D)
         }
     }
+    //销毁
     dispose() {
         if (this.object3D?.type === 'Mesh') {
             //@ts-ignore
@@ -51,25 +53,7 @@ export class Member {
             //@ts-ignore
             this.object3D.material.dispose()
         }
-
-
     }
-    updateFromPhysics() {
-       
-        // this.childrens.forEach(item => {
-        //     item.updateFromPhysics()
-        // })
-        if (this.object3D && this.physicsBody) {
-            //console.log(this.object3D )
-            const position = new THREE.Vector3(this.physicsBody.position.x, this.physicsBody.position.y, this.physicsBody.position.z);
-            const quaternion = new THREE.Quaternion(this.physicsBody.quaternion.x, this.physicsBody.quaternion.y, this.physicsBody.quaternion.z, this.physicsBody.quaternion.w);
-            this.object3D.position.copy(position);
-            this.object3D.quaternion.copy(quaternion);
-        }
-    }
-    // setPhysicsBody(physicsBody: CANNON.Body | null){
-
-    // }
     update() {
         if ((this.forwardSpeed != 0 || this.rightSpeed != 0) && this.object3D) {
             const direction = new THREE.Vector3(); // 前进方向向量
@@ -84,6 +68,12 @@ export class Member {
             const delta = direction.clone().multiplyScalar(this.forwardSpeed);
             // 将增量加到模型的当前位置上
             this.object3D.position.add(delta).add(delta2);
+            const position=this.object3D.position
+            if(this.physicsBody){
+                this.physicsBody.position.set(position.x,position.y,position.z)
+            }else{
+                
+            }
         }
         if ((this.rxSpeed != 0 || this.rySpeed != 0 || this.rzSpeed != 0) && this.object3D) {
             const rotation = this.object3D.rotation
@@ -93,6 +83,16 @@ export class Member {
         this.childrens.forEach(item => {
             item.update()
         })
+    }
+    updateFromPhysics() {
+        if (this.object3D && this.physicsBody) {
+            const position = new THREE.Vector3(this.physicsBody.position.x, this.physicsBody.position.y, this.physicsBody.position.z);      
+            this.object3D.position.copy(position);
+            if(this.type!=="character"){
+                const quaternion = new THREE.Quaternion(this.physicsBody.quaternion.x, this.physicsBody.quaternion.y, this.physicsBody.quaternion.z, this.physicsBody.quaternion.w);
+                this.object3D.quaternion.copy(quaternion);
+            }         
+        }
     }
     change(key: any, value: any) {
         const setter = this.setters[key];

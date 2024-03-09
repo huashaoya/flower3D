@@ -53,6 +53,7 @@ export interface ShapeResult<T extends Shape = Shape> {
 /**
  * Given a THREE.Object3D instance, creates parameters for a CANNON shape.
  */
+//获取shape参数
 export const getShapeParameters = function (object: Object3D, options: ShapeOptions = {}): ShapeParameters | null {
 	let geometry: BufferGeometry | null;
 
@@ -66,10 +67,7 @@ export const getShapeParameters = function (object: Object3D, options: ShapeOpti
 		return getConvexPolyhedronParameters(object);
 	} else if (options.type === ShapeType.MESH) {
 		geometry = getGeometry(object);
-		geometry = myScale(geometry,object.scale)
-		console.log(geometry)
-		let res= geometry ? getTrimeshParameters(geometry) : null
-		return res;
+		return  geometry ? getTrimeshParameters(geometry) : null
 	} else if (options.type) {
 		throw new Error(`[CANNON.getShapeParameters] Invalid type "${options.type}".`);
 	}
@@ -100,33 +98,10 @@ export const getShapeParameters = function (object: Object3D, options: ShapeOpti
 			return getBoxParameters(geometry);
 	}
 };
-export const myScale=function(_geometry,scale){
-	let geometry=_geometry.clone()
-	if (geometry.isBufferGeometry) {
-		const positionAttribute = geometry.attributes.position;
-		for (let i = 0; i < positionAttribute.count; i++) {
-			const vertex = new Vector3().fromBufferAttribute(positionAttribute, i);
-			vertex.multiply(scale); // 使用Object3D的scale缩放顶点位置
-			positionAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z); // 更新顶点位置
-		}
-		positionAttribute.needsUpdate = true; // 标记position属性需要更新
-	} else if (geometry.isGeometry) {
-		console.warn('THREE.Geometry is deprecated. Consider using THREE.BufferGeometry instead.');
-		// 对于旧版THREE.Geometry，可以遍历geometry.vertices来应用缩放
-		for (let vertex of geometry.vertices) {
-			vertex.multiply(scale);
-		}
-		geometry.verticesNeedUpdate = true;
-	}
-
-	// 如果geometry有边界框或边界球，则需要更新
-	if (geometry.boundingBox) geometry.computeBoundingBox();
-	if (geometry.boundingSphere) geometry.computeBoundingSphere();
-	return geometry
-}
 /**
  * Given a THREE.Object3D instance, creates a corresponding CANNON shape.
  */
+//主函数
 export const threeToCannon = function (object: Object3D, options: ShapeOptions = {}): ShapeResult | null {
 	const shapeParameters = getShapeParameters(object, options);
 	if (!shapeParameters) {
@@ -158,13 +133,13 @@ export const threeToCannon = function (object: Object3D, options: ShapeOptions =
  * Shape construction
  */
 
- function createBox (params: BoxParameters): Box {
+function createBox(params: BoxParameters): Box {
 	const { x, y, z } = params;
 	const shape = new Box(new Vec3(x, y, z));
 	return shape;
 }
 
-function createCylinder (params: CylinderParameters): Cylinder {
+function createCylinder(params: CylinderParameters): Cylinder {
 	const { radiusTop, radiusBottom, height, segments } = params;
 
 	const shape = new Cylinder(radiusTop, radiusBottom, height, segments);
@@ -179,13 +154,13 @@ function createCylinder (params: CylinderParameters): Cylinder {
 	return shape;
 }
 
-function createSphere (params: SphereParameters): Sphere {
+function createSphere(params: SphereParameters): Sphere {
 	const shape = new Sphere(params.radius);
 
 	return shape;
 }
 
-function createConvexPolyhedron (params: ConvexPolyhedronParameters): ConvexPolyhedron {
+function createConvexPolyhedron(params: ConvexPolyhedronParameters): ConvexPolyhedron {
 	const { faces, vertices: verticesArray } = params;
 
 	const vertices: Vec3[] = [];
@@ -205,13 +180,12 @@ function createConvexPolyhedron (params: ConvexPolyhedronParameters): ConvexPoly
 	return shape;
 }
 
-function createTrimesh (params: TrimeshParameters): Trimesh {
+function createTrimesh(params: TrimeshParameters): Trimesh {
 	const { vertices, indices } = params
 	const shape = new Trimesh(
 		vertices as unknown as number[],
 		indices as unknown as number[],
 	);
-		console.log(shape)
 	return shape;
 }
 
@@ -219,7 +193,7 @@ function createTrimesh (params: TrimeshParameters): Trimesh {
  * Shape parameters
  */
 
-function getBoxParameters (geometry: BufferGeometry): ShapeParameters<ShapeType.BOX> | null {
+function getBoxParameters(geometry: BufferGeometry): ShapeParameters<ShapeType.BOX> | null {
 	const vertices = getVertices(geometry);
 
 	if (!vertices.length) return null;
@@ -238,7 +212,7 @@ function getBoxParameters (geometry: BufferGeometry): ShapeParameters<ShapeType.
 }
 
 /** Bounding box needs to be computed with the entire subtree, not just geometry. */
-function getBoundingBoxParameters (object: Object3D): ShapeParameters<ShapeType.BOX> | null {
+function getBoundingBoxParameters(object: Object3D): ShapeParameters<ShapeType.BOX> | null {
 	const clone = object.clone();
 	clone.quaternion.set(0, 0, 0, 1);
 	clone.updateMatrixWorld();
@@ -263,7 +237,7 @@ function getBoundingBoxParameters (object: Object3D): ShapeParameters<ShapeType.
 }
 
 /** Computes 3D convex hull as a CANNON.ConvexPolyhedron. */
-function getConvexPolyhedronParameters (object: Object3D): ShapeParameters<ShapeType.HULL> | null {
+function getConvexPolyhedronParameters(object: Object3D): ShapeParameters<ShapeType.HULL> | null {
 	const geometry = getGeometry(object);
 
 	if (!geometry) return null;
@@ -280,7 +254,7 @@ function getConvexPolyhedronParameters (object: Object3D): ShapeParameters<Shape
 	}
 
 	// Compute the 3D convex hull and collect convex hull vertices and faces.
-	const [ positions, indices ] = new ConvexHull()
+	const [positions, indices] = new ConvexHull()
 		.setFromObject(new Mesh(geometry))
 		.toJSON();
 
@@ -293,7 +267,7 @@ function getConvexPolyhedronParameters (object: Object3D): ShapeParameters<Shape
 	};
 }
 
-function getCylinderParameters (
+function getCylinderParameters(
 	geometry: CylinderGeometry
 ): ShapeParameters<ShapeType.CYLINDER> | null {
 	const params = geometry.parameters;
@@ -312,7 +286,7 @@ function getCylinderParameters (
 	}
 }
 
-function getBoundingCylinderParameters (
+function getBoundingCylinderParameters(
 	object: Object3D,
 	options: ShapeOptions
 ): ShapeParameters<ShapeType.CYLINDER> | null {
@@ -347,7 +321,7 @@ function getBoundingCylinderParameters (
 	};
 }
 
-function getPlaneParameters (geometry: BufferGeometry): ShapeParameters<ShapeType.BOX> | null {
+function getPlaneParameters(geometry: BufferGeometry): ShapeParameters<ShapeType.BOX> | null {
 	geometry.computeBoundingBox();
 	const box = geometry.boundingBox!;
 
@@ -361,14 +335,14 @@ function getPlaneParameters (geometry: BufferGeometry): ShapeParameters<ShapeTyp
 	};
 }
 
-function getSphereParameters (geometry: SphereGeometry): ShapeParameters<ShapeType.SPHERE> | null {
+function getSphereParameters(geometry: SphereGeometry): ShapeParameters<ShapeType.SPHERE> | null {
 	return {
 		type: ShapeType.SPHERE,
 		params: { radius: geometry.parameters.radius },
 	};
 }
 
-function getBoundingSphereParameters (
+function getBoundingSphereParameters(
 	object: Object3D,
 	options: ShapeOptions
 ): ShapeParameters<ShapeType.SPHERE> | null {
@@ -388,17 +362,10 @@ function getBoundingSphereParameters (
 	};
 }
 
-function getTrimeshParameters (geometry: BufferGeometry): ShapeParameters<ShapeType.MESH> | null {
+function getTrimeshParameters(geometry: BufferGeometry): ShapeParameters<ShapeType.MESH> | null {
 	const vertices = getVertices(geometry);
-
 	if (!vertices.length) return null;
-
-	// const indices = new Uint32Array(vertices.length);
-	// for (let i = 0; i < vertices.length; i++) {
-	// 	indices[i] = i;
-	// }
-	const indices =geometry.index?.array
-
+	const indices = geometry.index?.array
 	return {
 		type: ShapeType.MESH,
 		params: {

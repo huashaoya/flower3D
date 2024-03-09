@@ -1,13 +1,13 @@
 import { Member } from "../Member";
 import { Manager } from "../Manager";
 import * as THREE from "three";
-
+import * as CANNON from "cannon-es";
 export class ThirdPersonCamera extends Member {
    target: Member
    camera: THREE.PerspectiveCamera
    theta: number = 180
    phi: number = 40
-   radius: number = 20
+   radius: number = 2
    dom: HTMLCanvasElement
    mouseLocked: boolean = false
    locked: boolean = false
@@ -62,6 +62,11 @@ export class ThirdPersonCamera extends Member {
             const lerpedTheta = THREE.MathUtils.lerp(this.target.object3D.rotation.y, targetTheta, 0.1);
             this.target.object3D.rotation.set(rotation.x, lerpedTheta, rotation.z);
          }
+         if (this.target.physicsBody) {
+            const quaternion = new CANNON.Quaternion(this.target.object3D.quaternion.x, this.target.object3D.quaternion.y, this.target.object3D.quaternion.z, this.target.object3D.quaternion.w);
+
+            this.target.physicsBody.quaternion.copy(quaternion)
+         }
       }
    }
 
@@ -69,7 +74,7 @@ export class ThirdPersonCamera extends Member {
       this.theta -= deltaX * this.sensitivity.x;
       //this.theta %= 360;
       this.phi += deltaY * this.sensitivity.y;
-      this.phi = Math.min(75, Math.max(-75, this.phi));
+      this.phi = Math.min(75, Math.max(-35, this.phi));
    }
 
    boundOnMouseDown = () => {

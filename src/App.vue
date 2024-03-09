@@ -22,17 +22,17 @@ onMounted(() => {
 const handleKeyDown=(e:any)=>{
   let KEY=e.key
   if(KEY=='w'){
-    speed.value=20
+    speed.value=3
     aindex.value=19
     locked.value=true
   }else if(KEY=='d'){
-    speedRight.value=10
+    speedRight.value=2
     aindex.value=18
   }else if(KEY=='a'){
-    speedRight.value=-10
+    speedRight.value=-2
     aindex.value=17
   }else if(KEY=='s'){
-    speed.value=-20
+    speed.value=-3
     aindex.value=19
   }else if(KEY==' '){
     //speed.value=-20
@@ -93,15 +93,25 @@ const handleKeyUp=(e:any)=>{
 
         <Cube ref="cube" :x="0.8" :y="-5" v-bind="{ color: 'gray', h: 0.2, w: 60, d: 80 }" :mass="0" />
       </World> -->
-      <World bg="black" physics>
-        <AmbientLight :intensity="1" />
+      <World bg="black" physics pbr>
+        <AmbientLight :intensity="0" />
         <KeyBoard @key-up="handleKeyUp" @key-down="handleKeyDown"></KeyBoard>
-        <!-- <SkyBox src="/textures/hdr/003.hdr"></SkyBox> -->
+        <SkyBox src="/textures/hdr/003.hdr"></SkyBox>
         <DirectionalLight v-bind="{ y: 50, x: 50,z:50 }" :intensity="3"/>
-        <GLTFModel src="./trimesh2.glb"  :scale="1" type="map">
+        <GLTFModel src="./world.glb"  :scale="2" type="map">
+         
         </GLTFModel>
-        <GLTFModel src="./boxman.glb" :y="30" :scale="10" :animation-index="aindex"  :forward-speed="speed" :right-speed="speedRight">
-          <ThirdPersonCamera :locked="locked" :offset-y="6"></ThirdPersonCamera>
+        <GLTFModel src="./heshouwu.glb"  :scale="10" type="none" :y="30.5">
+         
+        </GLTFModel>
+        <!-- <GLTFModel src="./2.glb"  :scale="3" type="trimesh"  :y="5" z="0">
+        
+
+        </GLTFModel> -->
+        <!-- <GLTFModel src="./trimesh-type.glb"  :scale="2" type="trimesh" :x="30" />
+        <GLTFModel src="./trimesh-type.glb"  :scale="2" type="map" :x="-30" /> -->
+        <GLTFModel src="./boxman.glb" type="character" :y="50" :scale="1" :animation-index="aindex"  :forward-speed="speed" :right-speed="speedRight">
+          <ThirdPersonCamera :locked="true" :offset-y="0.9"></ThirdPersonCamera>
         </GLTFModel>
         <!-- <Sphere  :y="20"></Sphere>
         <Sphere  :y="20" :x="3"></Sphere>
@@ -110,7 +120,7 @@ const handleKeyUp=(e:any)=>{
         <Sphere  :y="20" :x="-3"  :z="3"></Sphere>
         <Sphere  :y="20" :x="3" :z="-3"></Sphere>
         <Sphere  :y="20" :x="-3"  :z="-3"></Sphere> -->
-        <!-- <Cube ref="cube" :x="0.8" :y="-5" v-bind="{ color: 'gray', h: 0.2, w: 60, d: 80 }" :mass="0" /> -->
+        <!-- <Cube ref="cube" :x="0.8" :y="-5" v-bind="{ color: 'gray', h: 0.2, w: 150, d: 200 }" :mass="0" /> -->
       </World>
     </div>
   </div>

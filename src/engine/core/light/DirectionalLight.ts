@@ -12,7 +12,7 @@ export class DirectionalLight extends MemberWrapper {
         light.shadow.camera.left = -40
         light.shadow.camera.bottom = -40
         light.shadow.camera.far=500
-        light.shadow.mapSize.set(1024,1024)
+        light.shadow.mapSize.set(3024,3024)
         light.castShadow = true;
 
         super(props, manager, light, null)

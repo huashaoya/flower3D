@@ -20,7 +20,11 @@ export const modelProps = {
     type:{
         type: String,
         default: "none",
-    }
+    },
+    colliderMeshVisible:{
+        type: Boolean,
+        default: false,
+    },
 }
 
 export const modelPropsKV:Record<string,any>=objectToKV(modelProps)

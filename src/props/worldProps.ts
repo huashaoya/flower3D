@@ -15,5 +15,9 @@ export const worldProps = {
     type: Boolean,
     dafault: false,
   },
+  physicsDebug: {
+    type: Boolean,
+    dafault: false,
+  },
 }
 

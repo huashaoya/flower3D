@@ -11,9 +11,7 @@ const manager = ManagerBuilder.getManager(props.id);
 let resizeObserver:ResizeObserver
 
 const settings = {
-  pbr: props.pbr,
-  physics: props.physics,
-  id: props.id,
+  ...props
 };
 provide("id", props.id);
 manager.setSettings(settings);
