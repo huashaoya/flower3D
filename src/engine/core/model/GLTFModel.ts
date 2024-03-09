@@ -64,6 +64,7 @@ export class GLTFModel extends Member {
             if (manager.settings.physics && props.type !== "none") {
                 //地图碰撞体
                 if (props.type == "map") {
+                    that.type="map"
                     gltf.scene.traverse((child) => {
                         if (child instanceof THREE.Mesh) {
                             //地图内立方体碰撞体   
@@ -97,6 +98,7 @@ export class GLTFModel extends Member {
                 }
                 //trimesh碰撞体
                 else if (props.type == "trimesh") {
+                    that.type="trimesh"
                     let phys = new TrimeshCollider(element)
                     phys.body.quaternion.setFromEuler(props.rx, props.ry, props.rz);
                     that.physicsBody=phys.body

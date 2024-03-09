@@ -4,6 +4,7 @@ export { default as  KeyBoard} from "./components/api/KeyBoard.vue"
 
 export { default as  Cube } from "./components/basic/Cube.vue"
 export { default as  Sphere } from "./components/basic/Sphere.vue"
+export { default as  Plane } from "./components/basic/Plane.vue"
 
 export { default as  ThirdPersonCamera} from "./components/camera/ThirdPersonCamera.vue"
 

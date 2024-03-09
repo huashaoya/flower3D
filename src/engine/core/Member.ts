@@ -12,7 +12,7 @@ export class Member {
     rxSpeed: number = 0
     rySpeed: number = 0
     rzSpeed: number = 0
-    type:string="none"
+    type:string="movable"
     setters: Record<string, any> = {
         x: this.setX,
         y: this.setY,
@@ -86,12 +86,15 @@ export class Member {
     }
     updateFromPhysics() {
         if (this.object3D && this.physicsBody) {
-            const position = new THREE.Vector3(this.physicsBody.position.x, this.physicsBody.position.y, this.physicsBody.position.z);      
-            this.object3D.position.copy(position);
-            if(this.type!=="character"){
+            if(this.type=="movable"){
+                const position = new THREE.Vector3(this.physicsBody.position.x, this.physicsBody.position.y, this.physicsBody.position.z);      
+                this.object3D.position.copy(position);
                 const quaternion = new THREE.Quaternion(this.physicsBody.quaternion.x, this.physicsBody.quaternion.y, this.physicsBody.quaternion.z, this.physicsBody.quaternion.w);
                 this.object3D.quaternion.copy(quaternion);
-            }         
+            }  else if(this.type=="character") {
+                const position = new THREE.Vector3(this.physicsBody.position.x, this.physicsBody.position.y, this.physicsBody.position.z);      
+                this.object3D.position.copy(position);
+            }      
         }
     }
     change(key: any, value: any) {
