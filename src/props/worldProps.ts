@@ -1,5 +1,5 @@
 export const worldProps = {
-  id:{
+  id: {
     type: Number,
     default: 1,
   },
@@ -12,10 +12,14 @@ export const worldProps = {
     default: false,
   },
   physics: {
+    type: String,
+    dafault: "none",
+  },
+  physicsDebug: {
     type: Boolean,
     dafault: false,
   },
-  physicsDebug: {
+  stats: {
     type: Boolean,
     dafault: false,
   },

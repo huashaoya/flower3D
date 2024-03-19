@@ -2,7 +2,7 @@ import * as THREE from "three";
 import * as CANNON from "cannon-es"
 import { MemberWrapper } from "../MemberWrapper";
 import { Manager } from "../Manager";
-import { threeToCannon, ShapeType } from 'three-to-cannon';
+import { threeToCannon, ShapeType } from '../../utils/cannon-to-three/src/index';
 
 export class Cube extends MemberWrapper {
     constructor(props: Record<string, any>, manager: Manager) {

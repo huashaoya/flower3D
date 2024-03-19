@@ -23,7 +23,7 @@
     "cannon-es": "^0.20.0",
     "cannon-es-debugger": "^1.0.0",
     "three": "^0.161.0",
-    "three-to-cannon": "^5.0.1",
+    "three-mesh-bvh": "^0.7.3",
     "vue": "^3.3.11"
   },
   "devDependencies": {

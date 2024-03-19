@@ -1,11 +1,12 @@
 import * as THREE from "three";
-
+import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast,MeshBVHHelper} from 'three-mesh-bvh';
 import { Member } from "../Member";
 import { Manager } from "../Manager";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { BoxCollider } from "../../physics/colliders/BoxCollider";
 import { TrimeshCollider } from "../../physics/colliders/TrimeshCollider";
 import { CharacterCollider } from "../../physics/colliders/CharacterCollider";
+import Sphere from "../../../components/basic/Sphere.vue";
 
 
 export class GLTFModel extends Member {
@@ -61,10 +62,11 @@ export class GLTFModel extends Member {
             };
 
             //物理部分
-            if (manager.settings.physics && props.type !== "none") {
+            //碰撞体物理
+            if (manager.settings.physics === "collider" && props.type !== "none") {
                 //地图碰撞体
                 if (props.type == "map") {
-                    that.type="map"
+                    that.type = "map"
                     gltf.scene.traverse((child) => {
                         if (child instanceof THREE.Mesh) {
                             //地图内立方体碰撞体   
@@ -89,21 +91,61 @@ export class GLTFModel extends Member {
                 }
                 //角色碰撞体
                 else if (props.type == "character") {
-                    that.type="character"
+                    that.type = "character"
                     let phys = new CharacterCollider(element)
                     phys.body.quaternion.setFromEuler(props.rx, props.ry, props.rz);
                     phys.body.position.set(props.x, props.y, props.z)
-                    that.physicsBody=phys.body
+                    that.physicsBody = phys.body
                     manager.cannonWorld.addBody(phys.body);
                 }
                 //trimesh碰撞体
                 else if (props.type == "trimesh") {
-                    that.type="trimesh"
+                    that.type = "trimesh"
                     let phys = new TrimeshCollider(element)
                     phys.body.quaternion.setFromEuler(props.rx, props.ry, props.rz);
-                    that.physicsBody=phys.body
+                    that.physicsBody = phys.body
                     manager.cannonWorld.addBody(phys.body);
                 }
+            } else if (manager.settings.physics === "raycaster"&& props.type !== "none") {                           
+                THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
+                THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
+                THREE.Mesh.prototype.raycast = acceleratedRaycast;
+
+                if(props.type == "character"){                 
+                    const shape=new THREE.Box3()
+                    shape.expandByObject ( element )
+                    const size=new THREE.Vector3
+                    shape.getSize(size)
+                    const c=new THREE.Vector3
+                    shape.getCenter(c)
+                    console.log(c)
+                    const geometry = new THREE.BoxGeometry(size.x,size.y,size.z );
+                    const material = manager.settings?.pbr
+                        ? new THREE.MeshStandardMaterial({ color: "white" })
+                        : new THREE.MeshBasicMaterial({ color: "white" });
+                    const e = new THREE.Mesh(geometry, material);
+                    e.position.set(c.x,c.y,c.z)
+                    //manager.scene.add( e );
+                    e.geometry.computeBoundsTree()
+                    const boundsViz = new MeshBVHHelper( e );
+                    manager.scene.add( boundsViz );
+                    that.raycasterBody=shape.clone()
+                    console.log(shape)
+                    that.raycasterBodyMesh=e
+                }else{
+                //     gltf.scene.traverse((child) => {
+                //     if (child instanceof THREE.Mesh) {
+                //       child.geometry.computeBoundsTree()
+                //       const boundsViz = new MeshBVHHelper( child );
+                //       manager.scene.add( boundsViz );
+                //       //console.log(boundsViz)
+                //     }
+                // })
+                }
+               
+                //geom.computeBoundsTree();
+            }else if (manager.settings.physics === "octee"&& props.type !== "none") {  
+
             }
         });
     }

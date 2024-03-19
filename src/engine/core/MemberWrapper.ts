@@ -13,7 +13,7 @@ export class MemberWrapper extends Member {
 
         let body = null;
         //如果开启了物理
-        if (manager.settings.physics && shape) {
+        if (manager.settings.physics==="collider" && shape) {
             const material = new CANNON.Material();
             body = new CANNON.Body({
                 shape: shape,

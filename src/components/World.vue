@@ -46,7 +46,10 @@ function init() {
   //provide("width", width);
   //provide("height", height);
   worldRef?.value.appendChild(manager.renderer.domElement);
-
+  if(manager.stats){
+    //@ts-ignore
+    worldRef?.value.appendChild(manager.stats.domElement)
+  }
   //响应世界窗口变化
   resizeObserver = new ResizeObserver(entries => {
     for (const entry of entries) {
