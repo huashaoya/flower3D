@@ -2,7 +2,7 @@
 + 基于THREE和CANNON的VUE组件库
 
 演示视频：https://www.bilibili.com/video/BV1dF4m1T7ua/?spm_id_from=333.999.0.0&vd_source=ec6716780ee24d4b991bded353c94ce7
-
+<pre>
 更新日志：
 1.利用六大设计原则优化代码结构
 2.世界窗口大小变化响应
@@ -31,3 +31,4 @@
 11.增加rxSpeed,rySpeed,rzSpeed旋转速度属性
 2024/02/07 0.1.0
 1.第一版发布
+  </pre>
